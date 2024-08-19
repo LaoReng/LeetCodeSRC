@@ -1782,4 +1782,29 @@ private:
 		}
 		return obstacleGrid[obstacleGrid.size() - 1][obstacleGrid[0].size() - 1];
 	}
+
+///*** No.64
+	int minPathSum(vector<vector<int>>& grid) {
+        // 思想就是，让每一个位置过来的数字总和都是最小的
+		for (int i = 1; i < grid[0].size(); i++) {
+			grid[0][i] += grid[0][i - 1];
+		}
+		for (int i = 1; i < grid.size(); i++) {
+			grid[i][0] += grid[i - 1][0];
+		}
+		for (int i = 1; i < grid.size(); i++) {
+			for (int j = 1; j < grid[0].size(); j++) {
+				int temp1 = grid[i][j] + grid[i - 1][j];
+				int temp2 = grid[i][j] + grid[i][j - 1];
+				if (temp1 < temp2) {
+					grid[i][j] = temp1;
+				}
+				else {
+					grid[i][j] = temp2;
+				}
+			}
+		}
+
+		return grid[grid.size() - 1][grid[0].size() - 1];
+	}
 };
