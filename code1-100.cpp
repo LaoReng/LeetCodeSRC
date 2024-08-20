@@ -1807,4 +1807,28 @@ private:
 
 		return grid[grid.size() - 1][grid[0].size() - 1];
 	}
+
+///*** No.77
+	vector<vector<int>> combine(int n, int k) {
+		// 回溯求解，满足个数就放到解决数组中
+		vector<vector<int>> res;
+		std::function<void(std::vector<int>&, int)> dfs = [&](std::vector<int>& item, int num) {
+			item.push_back(num);
+			if (item.size() == k) {
+				res.push_back(item);
+				return;
+			}
+
+			for (int i = num + 1; i <= n; i++) {
+				dfs(item, i);
+				item.pop_back();
+			}
+		};
+		
+		for (int i = 1; i <= n; i++) {
+			std::vector<int> item;
+			dfs(item, i);
+		}
+		return res;
+	}
 };
