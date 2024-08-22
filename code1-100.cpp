@@ -1808,6 +1808,34 @@ private:
 		return grid[grid.size() - 1][grid[0].size() - 1];
 	}
 
+///*** No.73
+	void setZeroes(vector<vector<int>>& matrix) {
+		// 两个set保存0所在的横坐标和纵坐标
+		std::set<int> hengSet;
+		std::set<int> shuSet;
+
+		for (int i = 0; i < matrix.size(); i++) {
+			for (int j = 0; j < matrix[i].size(); j++) {
+				if (matrix[i][j] == 0) {
+					hengSet.insert(i);
+					shuSet.insert(j);
+				}
+			}
+		}
+		// 把横向的变成0
+		for (auto it = hengSet.begin(); it != hengSet.end(); it++) {
+			for (int j = 0; j < matrix[0].size(); j++) {
+				matrix[*it][j] = 0;
+			}
+		}
+
+		for (auto it = shuSet.begin(); it != shuSet.end(); it++) {
+			for (int j = 0; j < matrix.size(); j++) {
+				matrix[j][*it] = 0;
+			}
+		}
+	}
+
 ///*** No.77
 	vector<vector<int>> combine(int n, int k) {
 		// 回溯求解，满足个数就放到解决数组中
