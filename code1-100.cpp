@@ -1808,6 +1808,47 @@ private:
 		return grid[grid.size() - 1][grid[0].size() - 1];
 	}
 
+///*** No.71
+	string simplifyPath(string path) {
+		path += '/';
+		std::vector<std::string> stack;
+		int i = 0;
+		std::string item;
+		for (int i = 0; i < path.size(); i++) {
+			if (path[i] == '/') {
+				// 这个时候就需要处理了
+				std::string temp = item;
+				item.clear();
+				if (temp == "" || temp == ".")continue;
+				if (temp == "..") {
+					// 把前一个出栈
+					if (stack.size() != 0) {
+						stack.pop_back();
+					}
+					continue;
+				}
+				stack.push_back(temp);
+				continue;
+			}
+			item += path[i];
+		}
+
+		path.clear();
+		if (stack.size() == 0) {
+			path = "/";
+		}
+		else {
+
+
+			for (auto it : stack) {
+				path = path + "/" + it;
+				// std::cout << it << std::endl;
+			}
+		}
+
+		return path;
+	}
+
 ///*** No.73
 	void setZeroes(vector<vector<int>>& matrix) {
 		// 两个set保存0所在的横坐标和纵坐标
