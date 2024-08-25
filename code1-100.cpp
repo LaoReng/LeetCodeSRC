@@ -1877,6 +1877,53 @@ private:
 		}
 	}
 
+///*** No.74
+	bool searchMatrix(vector<vector<int>>& matrix, int target) {
+		// 在第一排竖着二分
+		// 然后在找到的那一排进行横向二分
+		int l = 0, r = matrix.size() - 1;
+		int hmid;
+		while (l <= r) {
+			hmid = ((r - l) / 2) + l;
+			if (matrix[hmid][0] > target) {
+				// 要把r往前移动
+				r = hmid - 1;
+			}
+			else if (matrix[hmid][0] < target) {
+				// 要把l往后移动
+				l = hmid + 1;
+			}
+			else {
+				return true;
+			}
+		}
+		// 确定target的大致位置，有可能当前hmid的位置要比target大，如果大的话就看上一行（因为这一行都没有可能了，第一个是最小的）
+		if (matrix[hmid][0] > target) {
+			hmid--;
+		}
+		// 这时有可能hmid的值是不合法的需要判断一下
+		if (hmid < 0) {
+			return false;
+		}
+
+		l = 0;
+		r = matrix[hmid].size() - 1;
+		while (l <= r) {
+			int mid = ((r - l) / 2) + l;
+			if (matrix[hmid][mid] > target) {
+				// 要把r往前移动
+				r = mid - 1;
+			}
+			else if (matrix[hmid][mid] < target) {
+				// 要把l往后移动
+				l = mid + 1;
+			}
+			else
+				return true;
+		}
+		return false;
+	}
+
 ///*** No.77
 	vector<vector<int>> combine(int n, int k) {
 		// 回溯求解，满足个数就放到解决数组中
