@@ -1924,6 +1924,30 @@ private:
 		return false;
 	}
 
+///*** No.75
+	void sortColors(vector<int>& nums) {
+		// 让前面的都是0，后面的都是2，中间的不需要管就可以了
+		int zeroIndex = 0;
+		int i = 0;
+		int  twoIndex = nums.size() - 1;
+		while (i <= twoIndex) {
+			if (nums[i] == 0) {
+				// 把0交换过去
+				std::swap(nums[i++], nums[zeroIndex++]);
+				// 这个换过来的i为什么不用管，就可以直接往前面走，
+				// 这是因为i一定是>=  zeroIndex的，来到这里地方我们前面的东西都是判断过的，要不是0要不就是1所以不用管可以直接将i向前移动
+			}
+			else if (nums[i] == 1) {
+				// 1在中间不用动
+				i++;
+			}
+			else {
+				std::swap(nums[i], nums[twoIndex--]);
+				// 这里的i不能移动，是因为我们从后面换过来的东西还没进行判断，也就是不知道它是什么所以需要在判断一次i位置上的元素
+			}
+		}
+	}
+
 ///*** No.77
 	vector<vector<int>> combine(int n, int k) {
 		// 回溯求解，满足个数就放到解决数组中
