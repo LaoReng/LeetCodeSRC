@@ -1991,4 +1991,26 @@ private:
 		dfs(0, nums);
 		return ans;
 	}
+
+///*** No.80
+	int removeDuplicates(vector<int>& nums) {
+		// 如果两个一样，就把第一个指针停在两个一样的后面
+		if (nums.size() < 3)return nums.size();
+		int cnt = 1;  // 计数（计一样的个数）
+		int l = 2, r = 1;
+		while (r < nums.size()) {
+			if (nums[r] == nums[r - 1]) {
+				// 相等的话就cnt++
+				++cnt;
+			}
+			else {
+				cnt = 1;
+			}
+			if (cnt <= 2 && r>=l) { // 为什么有r==l ,如果cnt小于等于2那就证明r可以往前移动了这个地方的值是合理的不需要覆盖了
+				nums[l++] = nums[r];
+			}
+			r++;
+		}
+		return l;
+	}
 };
