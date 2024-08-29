@@ -2013,4 +2013,51 @@ private:
 		}
 		return l;
 	}
+
+///*** No.82
+	ListNode* deleteDuplicates(ListNode* head) {
+		if (head == NULL || head->next == NULL)return head;
+		// 先找到第一个不是重复元素的位置，将他赋值给head
+		ListNode* resHead = NULL;
+		ListNode* p = head, * q = NULL;
+		while (p != NULL) {
+			if (p->next != NULL && p->val == p->next->val) {
+				// 特殊处理
+				while (p->next != NULL && p->val == p->next->val) {
+					p = p->next;
+				}
+			}
+			else {
+				resHead = p;
+				break;
+			}
+			p = p->next;
+		}
+		if (resHead == NULL || resHead->next == NULL)return resHead;
+		// 已经找到了第一个不重复的开头
+		p = resHead;
+		q = resHead->next;
+		while (q != NULL) {
+			if (q->next != NULL && q->val == q->next->val) {
+				// 需要进行处理
+				// 在这里需要找到第一个不是重复元素的位置
+				do {
+					// 就要继续往下面搜了
+					int temp = q->val;
+					while (q != NULL && q->val == temp) {
+						q = q->next;
+					}
+					// q的val不等于temp
+					if (q == NULL || q->next == NULL)break;
+				} while (q->val == q->next->val); // 看看是不是进入了下一个重复项
+			    // 出来的一定是不重复的
+				p->next = q;
+			}
+			p = q; // p要跳到最后一个不重复的位置
+			if (p == NULL)
+				break;
+			q = q->next;
+		}
+		return resHead;
+	}
 };
