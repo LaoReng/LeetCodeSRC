@@ -2060,4 +2060,38 @@ private:
 		}
 		return resHead;
 	}
+
+///*** No.86
+	ListNode* partition(ListNode* head, int x) {
+		if (head == NULL || head->next == NULL)return head;
+		// 如果当前指针所在位置的值大于等于x，就向后找看后面还有没有比x小的值
+		// 有则交换，否则结束
+		// 但是要保留相对位置
+		// 方法二：
+		// 创造两个数组，保存小于x和大于等于x的数据
+        // 方法三：
+        // 新建两个列表，一个存放小于x另一个存放大于等于x的值，然后将这两个链表进行尾首拼接即可
+		std::vector<int> lArr;
+		std::vector<int> rArr;
+		ListNode* p = head;
+		while (p != NULL) {
+			if (p->val < x) {
+				lArr.push_back(p->val);
+			}
+			else {
+				rArr.push_back(p->val);
+			}
+			p = p->next;
+		}
+		p = head;
+		for (int i = 0; i < lArr.size(); i++) {
+			p->val = lArr[i];
+			p = p->next;
+		}
+		for (int i = 0; i < rArr.size(); i++) {
+			p->val = rArr[i];
+			p = p->next;
+		}
+		return head;
+	}
 };
