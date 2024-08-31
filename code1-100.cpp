@@ -2094,4 +2094,23 @@ private:
 		}
 		return head;
 	}
+
+///*** No.89
+	vector<int> grayCode(int n) {
+		// 2^n  == 1 << n
+		// 公式：第n个格雷码G(n) = n xor (n >> 1)
+		// 方法二（动态规划）：
+		// G(n+1) =  G(n) + G(n)的倒叙并且在前面|上1
+		//  首先你是知道0和1符合要求的格雷码的，在其基础上进行倒叙输出，这就意味着后半部分也满足了相差一位的特点
+		//  然后在前面添1，使得对接部分的数据也满足了要求，并且最后一个元素和第一个元素也只相差了一位
+		std::vector<int> res = {0};
+		int head = 1;  // 这时要在倒叙前面添加的1
+		for (int i = 0; i < n; i++) {
+			for (int j = res.size() - 1; j >= 0; --j) {
+				res.push_back(head | res[j]);
+			}
+			head <<= 1;
+		}
+		return res;
+	}
 };
