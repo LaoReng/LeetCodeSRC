@@ -1992,6 +1992,75 @@ private:
 		return ans;
 	}
 
+///*** No.79
+	bool exist(vector<vector<char>>& board, string word) {
+		struct Board
+		{
+			char val;
+			bool isUse;
+			Board(char v)
+				: val(v)
+				, isUse(false)
+			{}
+		};
+
+		std::vector<std::vector<Board>> arr;
+		for (int i = 0; i < board.size(); i++) {
+			std::vector<Board> item;
+			for (int j = 0; j < board[i].size(); ++j) {
+				item.push_back(board[i][j]);
+			}
+			arr.push_back(item);
+		}
+
+
+		std::function<bool(int, int, int)> dfs = [&](int x, int y, int index)->bool {
+			if (index == word.size() - 1 && arr[x][y].val == word[index])return true;
+			if (index >= word.size())return true;
+			if (arr[x][y].val != word[index])return false;
+
+			bool ret = false;
+			if (x - 1 >= 0 && arr[x - 1][y].isUse == false) {
+				arr[x - 1][y].isUse = true;
+				ret = dfs(x - 1, y, index + 1);
+				arr[x - 1][y].isUse = false;
+				if (ret)return ret;
+			}
+			if (x + 1 < arr.size() && arr[x + 1][y].isUse == false) {
+				arr[x + 1][y].isUse = true;
+				ret = dfs(x + 1, y, index + 1);
+				arr[x + 1][y].isUse = false;
+				if (ret)return ret;
+			}
+			if (y - 1 >= 0 && arr[x][y - 1].isUse == false) {
+				arr[x][y - 1].isUse = true;
+				ret = dfs(x, y - 1, index + 1);
+				arr[x][y - 1].isUse = false;
+				if (ret)return ret;
+			}
+			if (y + 1 < arr[0].size() && arr[x][y + 1].isUse == false) {
+				arr[x][y + 1].isUse = true;
+				ret = dfs(x, y + 1, index + 1);
+				arr[x][y + 1].isUse = false;
+				if (ret)return ret;
+			}
+			return ret;
+		};
+
+		bool ret = false;
+		for (int i = 0; i < arr.size(); ++i) {
+			for (int j = 0; j < arr[i].size(); ++j) {
+				if (arr[i][j].val == word[0]) {
+					arr[i][j].isUse = true;
+					ret = dfs(i, j, 0);
+					arr[i][j].isUse = false;
+					if (ret)return ret;
+				}
+			}
+		}
+		return ret;
+	}
+
 ///*** No.80
 	int removeDuplicates(vector<int>& nums) {
 		// 如果两个一样，就把第一个指针停在两个一样的后面
