@@ -2083,6 +2083,39 @@ private:
 		return l;
 	}
 
+///*** No.81
+	bool search(vector<int>& nums, int target) {
+		std::function<bool(std::vector<int>& arr, int, int, int)> binarySearch = [&](std::vector<int>& arr, int  begin, int end, int target) {
+			int l = begin;
+			int r = end;
+			while (l <= r) {
+				int mid = (r - l) / 2 + l;
+				if (arr[mid] > target) {
+					r = mid - 1;
+				}
+				else if (arr[mid] < target) {
+					l = mid + 1;
+				}
+				else
+					return true;
+			}
+			return false;
+		};
+
+		// 分为2部分进行二分查找
+		int i = 0;
+		for (; i < nums.size() - 1; i++) {
+			if (nums[i] > nums[i + 1]) {
+				// 这个i就是分界点
+				break;
+			}
+		}
+		if (true != binarySearch(nums, 0, i, target)) {
+			return binarySearch(nums, i + 1, nums.size() - 1, target);
+		}
+		return true;
+	}
+
 ///*** No.82
 	ListNode* deleteDuplicates(ListNode* head) {
 		if (head == NULL || head->next == NULL)return head;
