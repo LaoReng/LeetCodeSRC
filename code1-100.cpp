@@ -2215,4 +2215,26 @@ private:
 		}
 		return res;
 	}
+
+///*** No.92
+	ListNode* reverseBetween(ListNode* head, int left, int right) {
+		if (right == left)return head;
+		// 两个指针都到起始的位置
+		ListNode* p = head;
+		// 第一个元素和最后一个元素的位置记录一下
+		for (int i = 1; i < left; ++i) {
+			p = p->next;
+		}
+		ListNode* temp = p;
+		std::vector<int> arr;
+		for (int i = 0; i <= right - left; ++i) {
+			arr.push_back(temp->val);
+			temp = temp->next;
+		}
+		for (int i = arr.size() - 1; i >= 0; --i) {
+			p->val = arr[i];
+			p = p->next;
+		}
+		return head;
+	}
 };
