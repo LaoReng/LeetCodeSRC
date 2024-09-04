@@ -2216,6 +2216,31 @@ private:
 		return res;
 	}
 
+///*** No.90
+	vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+		// 0 1 2 3 4 5 6 7
+		int size = nums.size();
+		std::vector<std::vector<int>> res;
+		std::set<std::vector<int>> arr;
+		for (int i = 0; i < (1 << size); ++i) {
+			std::vector<int> item;
+			for (int j = 1; j <= size; ++j) {
+				if (i & (1 << size - j)) {
+					item.push_back(nums[j - 1]);
+				}
+				//std::cout << (1 << nums.size() - j) << " ";
+			}
+			std::sort(item.begin(), item.end());
+			arr.insert(item);
+			//std::cout << std::endl;
+		}
+
+		for (auto it : arr) {
+			res.push_back(it);
+		}
+		return res;
+	}
+
 ///*** No.92
 	ListNode* reverseBetween(ListNode* head, int left, int right) {
 		if (right == left)return head;
