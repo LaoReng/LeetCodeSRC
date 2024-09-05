@@ -2241,6 +2241,34 @@ private:
 		return res;
 	}
 
+///*** No.91
+	int numDecodings(string s) {
+		// 分为单的
+		//   和多的
+		// 初始，单 = 1、多 = 0
+		// next，单 = 单 + 多、多 = 能合并吗 ？ 等于上次的单 ：等于0
+		// 最后结果为：单 + 多
+		int dan = 0;
+		int duo = 0;
+		if (s[0] != '0') {
+			dan = 1;
+		}
+		for (int i = 1; i < s.size(); ++i) {
+			int tempDan = dan;
+			int tempDuo = duo;
+			dan = 0;
+			duo = 0;
+			if (s[i] != '0')
+				dan = tempDan + tempDuo;
+            if(s[i - 1] != '0' && s[i - 1] <= '2') {
+                if(s[i - 1]=='2' && s[i] > '6')
+                    continue;
+                duo = tempDan;
+            }
+		}
+		return dan + duo;
+	}
+
 ///*** No.92
 	ListNode* reverseBetween(ListNode* head, int left, int right) {
 		if (right == left)return head;
