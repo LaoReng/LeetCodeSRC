@@ -2290,4 +2290,27 @@ private:
 		}
 		return head;
 	}
+
+///*** No.98
+	bool isValidBST(TreeNode* root) {
+		// 对于一颗二叉搜索树来说，中序遍历是升序排列的
+		// 怎么检测一个数组是否是有序的呢
+		std::vector<int> nodeList;
+		std::function<void(TreeNode*)> inorderTraversal = [&](TreeNode* node) {
+			if (node == NULL)
+				return;
+			inorderTraversal(node->left);
+			nodeList.push_back(node->val);
+			inorderTraversal(node->right);
+		};
+		
+		inorderTraversal(root);
+
+		for (int i = 0; i < nodeList.size() - 1; ++i) {
+			if (nodeList[i] >= nodeList[i + 1]) {
+				return false;
+			}
+		}
+		return true;
+	}
 };
