@@ -27,6 +27,38 @@ public:
 		return res;
 	}
 
+///*** No.103
+	vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+		// 二叉树的层次遍历用队列来实现（广度优先搜索）
+		std::vector<std::vector<int>> res;
+		if (root == NULL)return res;
+		std::list<TreeNode*>  NodeList = { root };
+
+		int direction = 1;  // true:正向（左→右） false:逆向（右→左）
+		do {
+			int size = NodeList.size();
+			std::vector<int> item;
+			for (int i = 0; i < size; i++) {
+				TreeNode* temp = NodeList.front();
+				NodeList.pop_front();
+				if (temp == NULL)continue;
+				if (direction == 1) {
+					item.push_back(temp->val);
+				}
+				else {
+					item.insert(item.begin(), temp->val);
+				}
+				if (temp->left)
+					NodeList.push_back(temp->left);
+				if (temp->right)
+					NodeList.push_back(temp->right);
+			}
+			direction *= -1;
+			res.push_back(item);
+		} while (!NodeList.empty());
+		return res;
+	}
+
 ///*** No.126
     int fib(int n) {
 			if (n <= 0)return 0;
