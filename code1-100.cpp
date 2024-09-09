@@ -2313,4 +2313,28 @@ private:
 		}
 		return true;
 	}
+
+///*** No.99
+	void recoverTree(TreeNode* root) {
+        // 二叉搜索树，中序遍历的元素数组是升序的
+        // 所以可以全部读出来，然后排序在放回去
+        std::vector<int> arr;
+        std::vector<TreeNode*> NodeList;
+
+        std::function<void(TreeNode*)> inorderTraversal = [&](TreeNode* node){
+            if(node == NULL)return;
+            inorderTraversal(node->left);
+            arr.push_back(node->val);
+            NodeList.push_back(node);
+            inorderTraversal(node->right);
+        };
+
+        inorderTraversal(root);
+
+        std::sort(arr.begin(), arr.end());
+
+        for(int i=0;i<NodeList.size();++i){
+            NodeList[i]->val = arr[i];
+        }
+    }
 };
