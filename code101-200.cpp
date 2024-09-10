@@ -59,6 +59,40 @@ public:
 		return res;
 	}
 
+///*** No.107
+	vector<vector<int>> levelOrderBottom(TreeNode* root) {
+		vector<vector<int>> res;
+		if (root == NULL)return res;
+		std::vector<std::vector<TreeNode*>> nodeList = { {root} };
+		bool isValue = false;
+		int index = 0;
+		do {
+			std::vector<TreeNode*> item;
+			isValue = false;
+			for (int i = 0; i < nodeList[index].size(); ++i) {
+				if (nodeList[index][i]->left != NULL) {
+					item.push_back(nodeList[index][i]->left);
+					isValue = true;
+				}
+				if (nodeList[index][i]->right != NULL) {
+					item.push_back(nodeList[index][i]->right);
+					isValue = true;
+				}
+			}
+            if(isValue)
+                nodeList.push_back(item);
+			++index;
+		} while (isValue);
+		for (int i = nodeList.size() - 1; i >= 0; --i) {
+			vector<int> item;
+			for (int j = 0; j < nodeList[i].size(); ++j) {
+				item.push_back(nodeList[i][j]->val);
+			}
+			res.push_back(item);
+		}
+		return res;
+	}
+
 ///*** No.126
     int fib(int n) {
 			if (n <= 0)return 0;
