@@ -59,6 +59,62 @@ public:
 		return res;
 	}
 
+///*** No.105
+	TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+		std::function<TreeNode* (int, int, int, int)> CreateTree =
+			[&](int preorderBegin, int preorderEnd, int inorderBegin, int inorderEnd)->TreeNode* {
+			if (preorderBegin > preorderEnd || inorderBegin > inorderEnd)
+				return nullptr;
+			if (preorderEnd - preorderBegin != inorderEnd - inorderBegin) {
+				// 个数不同
+				printf("E:前序和中序虚列的元素个数不同\n");
+				return nullptr;
+			}
+
+			// 前序遍历的第一个节点是根节点
+			int rootValue = preorder[preorderBegin];
+			TreeNode* root = new TreeNode(rootValue, nullptr, nullptr);
+
+			// 只有一个节点的判断
+			if (preorderBegin == preorderEnd) {
+				if (inorderBegin == inorderEnd && preorder[preorderBegin] == inorder[inorderBegin])
+					return root;
+				else
+                    assert(false);
+			}
+
+			// 第二步：在中序遍历中找rootValue的位置，前面的既是这个root的左子树，后面的则是这个root的右子树
+			int rootValueIndex = inorderBegin;
+			while (rootValueIndex <= inorderEnd && rootValue != inorder[rootValueIndex])
+				++rootValueIndex;
+
+			if (rootValueIndex == inorderEnd && rootValue != inorder[rootValueIndex]) {
+				// 断言或者异常
+				assert(false);
+			}
+			int len = rootValueIndex - inorderBegin;
+			if (len > 0) {
+				// 有左子树
+				root->left = CreateTree(preorderBegin + 1, preorderBegin + len,
+					inorderBegin, rootValueIndex - 1);
+			}
+			if (len < inorderEnd - inorderBegin) {
+				// 有右子树，因为len的长度不是数组的全部
+				root->right = CreateTree(preorderBegin + len + 1, preorderEnd,
+					rootValueIndex + 1, inorderEnd);
+			}
+			return root;
+		};
+
+		int preorderSize = preorder.size();
+		int inorderSize = inorder.size();
+		if (preorderSize != inorderSize) {
+			printf("E:前序和中序虚列的元素个数不同\n");
+			return nullptr;
+		}
+		return CreateTree(0, preorderSize - 1, 0, inorderSize - 1);
+	}
+
 ///*** No.107
 	vector<vector<int>> levelOrderBottom(TreeNode* root) {
 		vector<vector<int>> res;
