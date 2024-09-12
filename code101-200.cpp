@@ -115,6 +115,57 @@ public:
 		return CreateTree(0, preorderSize - 1, 0, inorderSize - 1);
 	}
 
+///*** No.106
+	TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+		// 二叉树构造API（递归）
+		std::function<TreeNode* (int, int, int, int)> CreateTree =
+			[&](int inorderBegin, int inorderEnd, int postorderBegin, int postorderEnd)->TreeNode* {
+			// 后序遍历数组的最后一个元素是根节点
+			int rootValue = postorder[postorderEnd];
+			TreeNode* root = new TreeNode(rootValue, nullptr, nullptr);
+
+			if (inorderBegin == inorderEnd) {
+				// 只有一个元素了
+				if (postorderBegin == postorderEnd && inorder[inorderBegin] == postorder[postorderBegin]) {
+					return root;
+				}
+				else {
+					assert(false);
+					// throw std::exception("Invalid value");
+				}
+			}
+
+			int rootInorderIndex = inorderBegin;
+			while (rootInorderIndex <= inorderEnd && inorder[rootInorderIndex] != rootValue) {
+				++rootInorderIndex;
+			}
+			if (rootInorderIndex == inorderEnd && rootValue != inorder[inorderEnd]) {
+				assert(false);
+				// throw std::exception("Invalid value");
+			}
+
+
+			int leftLen = rootInorderIndex - inorderBegin;
+			if (leftLen > 0) {
+				// 有左子树
+				root->left = CreateTree(inorderBegin, rootInorderIndex - 1,
+					postorderBegin, postorderBegin + leftLen - 1);
+			}
+			if (leftLen < inorderEnd - inorderBegin) {
+				// 因为不是全部，所以有右子树
+				root->right = CreateTree(rootInorderIndex + 1, inorderEnd,
+					postorderBegin + leftLen, postorderEnd - 1);
+			}
+			return root;
+		};
+
+		int inorderSize = inorder.size();
+		int postorderSize = postorder.size();
+		if (inorderSize != postorderSize)
+			return nullptr;
+		return CreateTree(0, inorderSize - 1, 0, postorderSize - 1);
+	}
+
 ///*** No.107
 	vector<vector<int>> levelOrderBottom(TreeNode* root) {
 		vector<vector<int>> res;
