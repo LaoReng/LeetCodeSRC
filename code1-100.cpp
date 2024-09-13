@@ -2291,6 +2291,63 @@ private:
 		return head;
 	}
 
+///*** No.93
+	vector<string> restoreIpAddresses(string s) {
+		// 递归，回溯
+		// 地址为1位、2位、3位，满足条件加入结果集
+
+		std::vector<std::string> ip;   // 要判断的ip字段
+		std::vector<std::string> res;  // 结果集
+
+		std::function<void(int startIndex, int len)> dfs =
+			[&](int startIndex, int len) {
+			if (ip.size() == 4) {
+				if (s.size() == startIndex && len == 1) {
+					// 加入到结果集中，并返回
+					std::string subRes;
+					for (int i = 0; i < 4; i++) {
+						subRes += ip[i];
+						if (i != 3)
+							subRes += '.';
+					}
+					res.push_back(subRes);
+				}
+				//ip.pop_back();
+				return;
+			}
+			if ((startIndex + len > s.size()) || (s[startIndex] == '0' && len > 1))
+				return;
+			if (len == 3) {
+				// 有三个数
+				if (s[startIndex] > '2') {
+					return;
+				}
+				if (s[startIndex] == '2') {
+					if (
+						(s[startIndex + 1] > '5') ||
+						(s[startIndex + 1] == '5' && s[startIndex + 2] > '5')
+						)
+						return;
+				}
+			}
+			ip.push_back(std::string(s.begin() + startIndex, s.begin() + startIndex + len));
+
+			//  从len之后开始继续加入递归
+			for (int i = 1; i <= 3; i++) {
+				dfs(startIndex + len, i);
+			}
+			ip.pop_back();
+		};
+
+		if (s.size() > 3) {
+			std::vector<std::string> ip;
+			for (int i = 1; i <= 3; i++) {
+				dfs(0, i);
+			}
+		}
+		return res;
+	}
+
 ///*** No.98
 	bool isValidBST(TreeNode* root) {
 		// 对于一颗二叉搜索树来说，中序遍历是升序排列的
