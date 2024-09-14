@@ -200,6 +200,38 @@ public:
 		return res;
 	}
 
+///*** No.113
+	vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+		std::vector<std::vector<int>> res;
+		std::vector<int> nodeLists;
+
+		std::function<void(TreeNode*, int, int)> dfs =
+			[&](TreeNode* node, int targetSum, int  currentSum) {
+			if (node == nullptr)return;
+			// if(currentSum > targetSum)return;  这个判断为什么不能用，如果都是正数可以用否则不可以
+			currentSum += node->val;
+			nodeLists.push_back(node->val);
+			// 一定要走到叶子节点，有可能出现虽然两个值相等但是不是叶子节点\
+	        ，然后下面的数字可以当走到叶子节点时再次让其相等
+			if (node->left == nullptr && node->right == nullptr) {
+				// 这两个相等了，那就判断node是否是叶子节点
+				if (currentSum == targetSum) {
+					res.push_back(nodeLists);
+				}
+			}
+			else {
+				dfs(node->left, targetSum, currentSum);
+				dfs(node->right, targetSum, currentSum);
+			}
+			nodeLists.pop_back();
+			currentSum -= node->val;
+		};
+
+		if (root == nullptr)return res;
+		dfs(root, targetSum, 0);
+		return res;
+	}
+
 ///*** No.126
     int fib(int n) {
 			if (n <= 0)return 0;
