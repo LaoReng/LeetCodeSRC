@@ -1849,6 +1849,40 @@ private:
 		return path;
 	}
 
+///*** No.72
+	int minDistance(string word1, string word2) {
+        // 详细讲解：https://www.hello-algo.com/chapter_dynamic_programming/edit_distance_problem/#2
+		// 先创建二维dp数组
+		std::vector<std::vector<int>> dp(word1.size() + 1, std::vector<int>(word2.size() + 1, 0));
+		for (int i = 1; i < dp.size(); ++i) {
+			dp[i][0] = i;
+		}
+		for (int i = 1; i < dp[0].size(); ++i) {
+			dp[0][i] = i;
+		}
+
+		for (int i = 1; i < dp.size(); ++i) {
+			for (int j = 1; j < dp[0].size(); ++j) {
+				if (word1[i - 1] == word2[j - 1]) {
+					// 两个相等的话，直接等于dp[i-1][j-1]
+					dp[i][j] = dp[i - 1][j - 1];
+				}
+				else {
+					dp[i][j] = std::min(std::min(dp[i][j - 1], dp[i - 1][j]), dp[i - 1][j - 1]) + 1;
+				}
+			}
+		}
+
+		/*for (auto item : dp) {
+			for (auto it : item) {
+				std::cout << it << " ";
+			}
+			std::cout << std::endl;
+		}*/
+
+		return dp[dp.size() - 1][dp[0].size() - 1];
+	}
+
 ///*** No.73
 	void setZeroes(vector<vector<int>>& matrix) {
 		// 两个set保存0所在的横坐标和纵坐标
