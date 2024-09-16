@@ -232,6 +232,31 @@ public:
 		return res;
 	}
 
+///*** No.114
+	void flatten(TreeNode* root) {
+		if (root == NULL)return;
+		std::stack<TreeNode*> treeS;
+		std::function<void(TreeNode*)> preorderTraversal = [&](TreeNode* node) {
+			if (node == NULL)return;
+			treeS.push(node);
+			preorderTraversal(node->left);
+			preorderTraversal(node->right);
+		};
+
+		// 使用栈来实现
+		// 先序遍历，将每一个节点都放入栈中
+		preorderTraversal(root);
+
+		TreeNode* tempNode = NULL;
+		while (!treeS.empty()) {
+			TreeNode* rootNode = treeS.top();
+			treeS.pop();
+			rootNode->left = NULL;
+			rootNode->right = tempNode;
+			tempNode = rootNode;
+		}
+	}
+
 ///*** No.126
     int fib(int n) {
 			if (n <= 0)return 0;
