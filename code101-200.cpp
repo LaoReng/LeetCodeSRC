@@ -257,6 +257,36 @@ public:
 		}
 	}
 
+///*** No.116
+	Node* connect(Node* root) {
+		if (root == NULL)return root;
+		// 用队列进行广度优先遍历
+        // 然后将本次节点指向下一个节点，最后一个指向空
+		std::queue<Node*> nodeQ;
+		nodeQ.push(root);
+
+		while (!nodeQ.empty()) {
+			int qSize = nodeQ.size();
+			for (int i = 0; i < qSize; ++i) {
+				Node* temp = nodeQ.front();
+				if (temp->left) {
+					nodeQ.push(temp->left);
+				}
+				if (temp->right) {
+					nodeQ.push(temp->right);
+				}
+				nodeQ.pop();
+				if (i == qSize - 1) {
+					temp->next = NULL;
+				}
+				else {
+					temp->next = nodeQ.front();
+				}
+			}
+		}
+		return root;
+	}
+
 ///*** No.126
     int fib(int n) {
 			if (n <= 0)return 0;
