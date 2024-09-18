@@ -287,6 +287,35 @@ public:
 		return root;
 	}
 
+///*** No.117
+	Node* connect(Node* root) {
+		if (root == NULL)return root;
+		// 用队列来实现
+		std::queue<Node*> nodeQ;
+		nodeQ.push(root);
+
+		while (!nodeQ.empty()) {
+			int nodeSize = nodeQ.size();
+			for (int i = 0; i < nodeSize; ++i) {
+				Node* temp = nodeQ.front();
+				nodeQ.pop();
+				if (i == nodeSize - 1) {
+					temp->next = NULL;
+				}
+				else {
+					temp->next = nodeQ.front();
+				}
+
+				if (temp->left)
+					nodeQ.push(temp->left);
+				if (temp->right)
+					nodeQ.push(temp->right);
+
+			}
+		}
+		return root;
+	}
+
 ///*** No.126
     int fib(int n) {
 			if (n <= 0)return 0;
