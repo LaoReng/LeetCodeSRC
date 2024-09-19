@@ -2382,6 +2382,20 @@ private:
 		return res;
 	}
 
+///*** No.96
+	int numTrees(int n) {
+		// README中有图解
+        std::vector<int> arr(n + 1);
+        arr[0] = 1;
+        arr[1] = 1;
+        for(int i = 2; i <= n; ++i){
+            for(int j = 1; j <= i; ++j){
+                arr[i] += arr[j - 1] * arr[i - j];
+            }
+        }
+        return arr[n];
+    }
+
 ///*** No.98
 	bool isValidBST(TreeNode* root) {
 		// 对于一颗二叉搜索树来说，中序遍历是升序排列的
