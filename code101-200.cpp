@@ -316,6 +316,32 @@ public:
 		return root;
 	}
 
+///*** No.120
+	int minimumTotal(vector<vector<int>>& triangle) {
+		// 动态规划，让每一步的结果都是最小的，然后在底部找出最小值
+		// 根据题意，那么当前位置的值就是 dps[i][j] += min(dps[i-1][j](值存在),dps[i-1][j-1](值存在)); 
+		std::vector<std::vector<int>> dps = { {triangle[0][0]} };
+		for (int i = 1; i < triangle.size(); ++i) {
+			std::vector<int> temp = triangle[i];
+			for (int j = 0; j < triangle[i].size(); ++j) {
+				int min = 0;
+				if (j < dps[i - 1].size()) {
+					min = dps[i - 1][j];
+					if (j - 1 >= 0 && j - 1 < dps[i - 1].size()) {
+						min = min < dps[i - 1][j - 1] ? min : dps[i - 1][j - 1];
+					}
+				}
+				else if (j - 1 >= 0 && j - 1 < dps[i - 1].size()) {
+					min = dps[i - 1][j - 1];
+				}
+				temp[j] += min;
+			}
+			dps.push_back(temp);
+		}
+
+		return  *std::min_element(dps[triangle.size() - 1].begin(), dps[triangle.size() - 1].end());
+	}
+
 ///*** No.126
     int fib(int n) {
 			if (n <= 0)return 0;
