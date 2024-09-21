@@ -342,6 +342,19 @@ public:
 		return  *std::min_element(dps[triangle.size() - 1].begin(), dps[triangle.size() - 1].end());
 	}
 
+///*** No.122
+	int maxProfit(vector<int>& prices) {
+        // 当天的利润tmp = prices[i] - prices[i-1]
+        // 如果利润大于0，就将tmp加入总利润中；  小于等于0，就什么都不做
+        int tmp,res = 0;
+        for(int i=1;i<prices.size();++i){
+            tmp = prices[i] - prices[i-1];
+            if(tmp>0)
+                res += tmp;
+        }
+        return res;
+    }
+
 ///*** No.126
     int fib(int n) {
 			if (n <= 0)return 0;
