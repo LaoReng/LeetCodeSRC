@@ -369,4 +369,33 @@ public:
 			}
 			return temp;
     }
+
+///*** No.128
+	int longestConsecutive(vector<int>& nums) {
+		// 先用set集合去重
+		// 然后访问数组中的每一个数nums[i]，如果nums[i+1]在这个集合里面就接着找并将计数+1
+		// 当不在时，将其长度的计数与当前计数比较，取得最大值
+		std::set<int> numsS;
+		for (int i = 0; i < nums.size(); ++i) {
+			numsS.insert(nums[i]);
+		}
+
+		int res = 0;
+		for (auto it = numsS.begin(); it != numsS.end(); ++it) {
+			
+			int temp = *it;
+			// 如果temp-1存在就不用看了，因为已经找过了
+			if (numsS.count(temp - 1))continue;
+			int tempLen = 1;
+			while (numsS.count(temp + 1)) {
+				// temp+1的个数大于0
+				++temp;
+				// numsS.erase(temp);
+				++tempLen;
+			}
+			if (tempLen > res)
+				res = tempLen;
+		}
+		return res;
+	}
 };
