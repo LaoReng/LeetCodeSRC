@@ -398,4 +398,29 @@ public:
 		}
 		return res;
 	}
+
+///*** No.129
+	int sumNumbers(TreeNode* root) {
+		int res = 0;
+		std::function<void(TreeNode*, TreeNode*, int)> dfs = [&](TreeNode* root, TreeNode* node, int val){
+			if (node == NULL){
+				// 这个值就需要加入到结果中
+				if (root->left == NULL&&root->right == NULL){
+					res += val;
+					std::cout << val << " ";
+				}
+				return;
+			}
+			dfs(node, node->left, val * 10 + node->val);
+			if ((node->left == NULL) && (node->right == NULL)) // 防止多次重复值
+				return;
+			dfs(node, node->right, val * 10 + node->val);
+		};
+
+		if (root == NULL)
+			return 0;
+		// 递归遍历
+		dfs(root, root, 0);
+		return res;
+	}
 };
