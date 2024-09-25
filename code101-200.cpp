@@ -423,4 +423,55 @@ public:
 		dfs(root, root, 0);
 		return res;
 	}
+
+///*** No.130
+	void solve(vector<vector<char>>& board) {
+		// 可以反过来想，我们首先找到不可被围绕的区域，将其标记一下
+		// 剩下的不就是可以被围绕的吗
+
+		std::vector<std::vector<char>> temp = board; // 用于寻找不能围绕的区域
+
+		std::function<void(int, int)> changeBoard = [&](int rowIndex, int columnIndex) {
+			if (rowIndex < 0 || rowIndex >= board.size() ||
+				columnIndex < 0 || columnIndex >= board[0].size())
+				return;
+
+			if (temp[rowIndex][columnIndex] == 'O') {
+				temp[rowIndex][columnIndex] = 'X'; // 把找过的变成X防止重复寻找
+				board[rowIndex][columnIndex] = 'O';
+				// 并访问它的上下左右
+				changeBoard(rowIndex, columnIndex + 1);
+				changeBoard(rowIndex, columnIndex - 1);
+				changeBoard(rowIndex + 1, columnIndex);
+				changeBoard(rowIndex - 1, columnIndex);
+			}
+		};
+
+		for (int i = 0; i < board.size(); ++i) {
+			for (int j = 0; j < board[i].size(); ++j) {
+				board[i][j] = 'X';
+			}
+		}
+
+		// 找4个边界，看有没有'0'
+		// 上边界&下边界
+		for (int i = 0; i < board[0].size(); ++i) {
+			if (temp[0][i] == 'O') {
+				// 有'0'就找他们的上下左右
+				changeBoard(0, i);
+			}
+			if (temp[board.size() - 1][i] == 'O') {
+				changeBoard(board.size() - 1, i);
+			}
+		}
+		// 左边界&右边界
+		for (int i = 0; i < board.size(); ++i) {
+			if (temp[i][0] == 'O') {
+				changeBoard(i, 0);
+			}
+			if (temp[i][board[0].size() - 1] == 'O') {
+				changeBoard(i, board[0].size() - 1);
+			}
+		}
+	}
 };
