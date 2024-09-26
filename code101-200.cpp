@@ -474,4 +474,66 @@ public:
 			}
 		}
 	}
+
+///*** No.131
+	vector<vector<string>> partition(string s) {
+#define DEBUG_OUTPUT 0
+		// 回溯，
+		// 起始是： 1个 2个 3个 ...
+		// 那第一个举例： 如果1个是回文字符串，然后接着往后找一个、二个、三个...直到字符串末尾为止
+		// 如果不是就直接返回
+
+		std::vector<std::vector<std::string>> res;
+		std::vector<std::string> item;
+
+		// 判断回文串
+		std::function<bool(std::string)> isPalindromeString = [&](std::string s)->bool{
+			int l = 0, r = s.size() - 1;
+			while (l < r){
+				if (s[l] != s[r])
+					return false;
+				++l;
+				--r;
+			}
+			return true;
+		};
+
+		std::function<void(int, int)> dfs = [&](int begin, int len){
+			if (begin >= s.size() || begin + len > s.size())
+				return;
+
+			std::string temp(s.begin() + begin, s.begin() + begin + len);
+#if DEBUG_OUTPUT
+			printf("begin:%d, len:%d ", begin, len);
+			std::cout << "temp:" << temp.c_str() << std::endl;
+#endif
+			if (isPalindromeString(temp)){
+				// 这个是回文串
+				item.push_back(temp);
+#if DEBUG_OUTPUT
+				printf("begin=%d,len=%d,size=%d\n", begin, len, s.size());
+				for (auto it : item){
+					std::cout << it.c_str() << " ";
+				}
+				std::cout << "\n\n";
+#endif
+				if (s.begin() + begin + len == s.end()){
+					// 可以放入结果集中了
+					res.push_back(item);
+				}
+				else{
+					// 接着找
+					for (int i = 1; i <= s.size() - (begin + len); ++i){
+						dfs(begin + len, i);
+					}
+				}
+				item.pop_back();
+			}
+		};
+
+		for (int i = 1; i <= s.size(); ++i){
+			dfs(0, i);
+		}
+		return res;
+	}
 };
