@@ -536,4 +536,22 @@ public:
 		}
 		return res;
 	}
+
+///*** No.137
+	int singleNumber(vector<int>& nums) {
+		int res = nums[0];
+		std::multiset<int> mtemp;
+		std::set<int> temp;
+		for (auto it : nums){
+			mtemp.insert(it);
+			temp.insert(it);
+		}
+
+		for (auto it : temp){
+			if (mtemp.count(it) < 3){
+				res = it;
+			}
+		}
+		return res;
+	}
 };
