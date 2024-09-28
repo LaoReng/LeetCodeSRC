@@ -537,6 +537,28 @@ public:
 		return res;
 	}
 
+///*** No.134
+	int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+		// 题解：https://leetcode.cn/problems/gas-station/solutions/488622/134-jia-you-zhan-tan-xin-jing-dian-ti-mu-xiang-jie/
+		int size = gas.size();
+        int cunOil = 0;  // 当前位置油箱中的剩油
+		int startIndex = 0;  // 起始位置
+		int  sum = 0; // 总消耗的油
+		for (int i = 0; i < size; ++i) {
+			int temp = gas[i] - cost[i];
+			sum += temp;
+			cunOil += temp;
+			if (cunOil < 0) {
+				// 证明从0到i，这个区间补油是大于用油的
+				// 那么将起点切换到i+1位置，cunOil置0，继续寻找i的位置
+				startIndex = i + 1;
+				cunOil = 0;
+			}
+		}
+		if (sum < 0) return -1;
+		return startIndex;
+	}
+
 ///*** No.137
 	int singleNumber(vector<int>& nums) {
 		int res = nums[0];
