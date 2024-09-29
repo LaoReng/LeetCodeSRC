@@ -576,4 +576,55 @@ public:
 		}
 		return res;
 	}
+
+///*** No.138
+	Node* copyRandomList(Node* head) {
+		if (head == NULL)return NULL;
+#if 0
+		// 方法一
+		std::vector<Node*> nodeArr;
+		std::map<Node*, int> nodeMap;
+		cpHead = new Node(head->val);
+		Node* p = head->next;
+		int index = 0;
+		nodeMap.insert(std::make_pair(p, index++));
+		Node* q = cpHead;
+		nodeArr.push_back(q);
+		while (p != NULL) {
+			q->next = new Node(p->val);
+			p = p->next;
+			q = q->next;
+			nodeArr.push_back(q);
+			nodeMap.insert(std::make_pair(p, index++));
+		}
+
+		p = head;
+		q = cpHead;
+		while (p != NULL) {
+			q->random = nodeArr[nodeMap[p->random]];
+			p = p->next;
+			q = q->next;
+		}
+		return cpHead;
+#else
+		// 方法二：大神解法
+		// 使用哈希表：里面的键值对是{旧的地址，新的地址}
+		// 在遍历一遍，通过这个哈希表来构造深拷贝的链表
+		std::map<Node*, Node*> mBaseNewNode;
+		Node* p = head;
+		while (p) {
+			mBaseNewNode.insert(std::make_pair(p, new Node(p->val)));
+			p = p->next;
+		}
+		p = head;
+		while (p) {
+			// p就是当前的位置
+			// 通过旧地址找到新对应地址的位置，然后在通过旧地址的next和random在索引到对应的新地址【妙】
+			mBaseNewNode[p]->next = mBaseNewNode[p->next];
+			mBaseNewNode[p]->random = mBaseNewNode[p->random];
+			p = p->next;
+		}
+		return mBaseNewNode[head];
+#endif
+	}
 };
