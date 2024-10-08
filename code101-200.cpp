@@ -627,4 +627,41 @@ public:
 		return mBaseNewNode[head];
 #endif
 	}
+
+///*** No.139
+	bool wordBreak(string s, vector<string>& wordDict) {
+		// 字符串匹配函数
+		std::function<bool(const std::string&, const std::string&)> strCmp = [](const std::string& str1, const std::string& str2)->bool {
+			int str2Size = str2.size();
+			if (str1.size() < str2Size)
+				return false;
+
+			for (int i = 0; i < str2Size; ++i) {
+				if (str1[i] != str2[i])
+					return false;
+			}
+			return true;
+		};
+
+
+		// wordDict里面的单词可不可以组合出s来
+		if (s == "")return true;
+		std::vector<int> bs(s.size(), -1);
+		std::function<bool(int)> dfs = [&](int index)->bool {
+			// 当前这个位置有没有进行匹配过需要记录一下
+			// printf("%s(%d):%s\n", __FILE__, __LINE__, s.c_str());
+			if (s.size() <= index)return true;
+			if (bs[index] != -1)return bs[index];
+			for (auto str : wordDict) {
+				// 如果当前这个位置匹配了，就接着这个位置往后找
+				if (strCmp(s.data() + index, str) && dfs(index + str.size())) {
+					bs[index] = true;
+					return true;
+				}
+			}
+			bs[index] = false;
+			return false;
+		};
+		return dfs(0);
+	}
 };
