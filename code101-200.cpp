@@ -664,4 +664,18 @@ public:
 		};
 		return dfs(0);
 	}
+
+///*** No.142
+	ListNode* detectCycle(ListNode* head) {
+		// 如果它访问的next在集合里面就证明有环
+		std::set<ListNode*> sNode;
+		while (head) {
+			if (sNode.find(head) != sNode.end()) {
+				return head;
+			}
+			sNode.insert(head);
+			head = head->next;
+		}
+		return NULL;
+	}
 };
