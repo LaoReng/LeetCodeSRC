@@ -678,4 +678,27 @@ public:
 		}
 		return NULL;
 	}
+
+///*** No.143
+	void reorderList(ListNode* head) {
+        if(head == NULL)return;
+		// 访问链表中的元素保存到数组中，然后使用双指针重组链表
+		std::vector<ListNode*> NodeArr;
+		ListNode* p = head;
+		while (p){
+			NodeArr.push_back(p);
+			p = p->next;
+		}
+		p = head;
+		int l = 1, r = NodeArr.size() - 1;
+		while (l <= r){
+			p->next = NodeArr[r];
+			p = p->next;
+			p->next = NodeArr[l];
+			p = p->next;
+			++l;
+			--r;
+		}
+        p->next = NULL;
+	}
 };
