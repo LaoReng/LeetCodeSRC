@@ -701,4 +701,126 @@ public:
 		}
         p->next = NULL;
 	}
+
+///*** No.146
+	class LRUCache {
+	public:
+		// 还是要使用一个链表，把新put的放在开头，当谁被访问了则把他移到开头
+		// 如果是O(1)的时间复杂度，则需要借助哈希表来实现
+
+		// 构造函数
+		LRUCache(int capacity)
+			: m_list(nullptr)
+			, m_headPtr(nullptr)
+			, m_tailPtr(nullptr)
+			, m_capacity(capacity)
+		{
+		}
+		// 获取值函数
+		int get(int key) {
+			auto val = m_hashKey.find(key);
+			if (val == m_hashKey.end())return -1;
+			// 需要把当前这个节点的位置移到开头
+			moveNode(val->second);
+			return val->second->value;
+		}
+		// 向缓存中插入值的函数
+		void put(int key, int value) {
+			// 如果这个key存在，则就是换一下里面的值，然后将这个节点在重新插入到头节点中
+			auto val = m_hashKey.find(key);
+			if (m_hashKey.find(key) != m_hashKey.end()) {
+				// 这个key存在
+				val->second->value = value;
+				get(key);
+				return;
+			}
+
+			int nodeSize = m_hashKey.size();
+			// 新建一个元素直接插入到头部就可以了
+			node* temp = new node(key, value);
+			m_hashKey.insert(std::make_pair(key, temp));
+			if (nodeSize == m_capacity) {
+				// 缓存满了，就需要把链表最后一个元素删除，然后在头部插入一个元素
+				// ,还要把hashmap里面对应的key给删除
+				int key = deleteTailNode();
+				m_hashKey.erase(key);
+				insertHeadNode(temp);
+			}
+			else {
+				if (nodeSize == 0) {
+					// 这个就需要给两个链表指针进行赋值了
+					m_headPtr = m_tailPtr = temp;
+				}
+				else {
+					// 将他插入到头部
+					insertHeadNode(temp);
+				}
+			}
+		}
+	private:
+		// 双向链表
+		struct node {
+			int key;
+			int value;
+			node* next; // 指向后一个
+			node* prev; // 指向前一个
+			node(int key, int val)
+				: key(key)
+				, value(val)
+				, next(NULL)
+				, prev(NULL)
+			{}
+		};
+
+		std::unordered_map<int, node*> m_hashKey;
+		node* m_list;    // 双向链表实例
+		node* m_headPtr; // 链表头指针
+		node* m_tailPtr; // 链表尾指针
+		int m_capacity;  // 缓冲区最大数
+
+	private:
+		// 移动链表中的节点
+		void moveNode(node* ptr) {
+			// 将ptr从链表中拆除，然后插入到头部
+			if (ptr == m_headPtr) // 已经是头节点了就不需要移动了
+				return;
+			if (ptr == m_tailPtr) {
+				// 这个是尾部节点
+				m_tailPtr = ptr->prev;
+				ptr->prev->next = NULL;
+			}
+			else {
+				// 这个就是中间的节点
+				ptr->prev->next = ptr->next;
+				ptr->next->prev = ptr->prev;
+			}
+			insertHeadNode(ptr);
+		}
+		// 删除链表中的尾部节点
+		int deleteTailNode() {
+			int key;
+			if (m_tailPtr == m_headPtr) { // 链表中只有一个节点的情况处理
+				key = m_tailPtr->key;
+				m_tailPtr = m_headPtr = NULL;
+				delete m_tailPtr;
+				return key;
+			}
+			node* temp = m_tailPtr;
+			m_tailPtr = m_tailPtr->prev;
+			if (m_tailPtr)
+				m_tailPtr->next = NULL;
+			key = temp->key;
+			delete temp;
+			return key;
+		}
+		// 在链表头部插入节点
+		void insertHeadNode(node* ptr) {
+			ptr->next = m_headPtr;
+			if (m_headPtr)
+				m_headPtr->prev = ptr;
+			m_headPtr = ptr;
+			if (m_tailPtr == NULL)
+				m_tailPtr = m_headPtr;
+		}
+	};
 };
