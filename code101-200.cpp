@@ -823,4 +823,49 @@ public:
 				m_tailPtr = m_headPtr;
 		}
 	};
+
+///*** No.147
+	ListNode* insertionSortList(ListNode* head) {
+		if (head == NULL)return NULL;
+		// 链表排序
+		ListNode* newHead = head;
+		ListNode* basePtr = head->next;
+		newHead->next = NULL;
+		while (basePtr) {
+			ListNode* temp = basePtr;
+			basePtr = basePtr->next;
+			// 拿着当前这个basePtr和newHead里面的节点进行比较，看把他插在哪里
+			ListNode* p = newHead;
+			ListNode* nextP = p->next;
+			if (nextP == NULL) {  // 只有一个节点
+				if (temp->val > p->val) {
+					// 插入到后面
+					p->next = temp;
+					temp->next = NULL;
+				}
+				else {
+					// 插入到前面
+					temp->next = p;
+					newHead = temp;
+				}
+			}
+			else if (temp->val <= p->val) { // 比当前第一个节点就小，所以要他来当头节点
+				temp->next = p;
+				newHead = temp;
+			}
+			else {
+				// 现在就是没有特殊情况了
+				while (nextP) {
+					if (nextP->val > temp->val)
+						break;
+					nextP = nextP->next;
+					p = p->next;
+				}
+				// 现在的p就是当前要插入节点的前一个节点
+				temp->next = p->next;
+				p->next = temp;
+			}
+		}
+		return newHead;
+	}
 };
