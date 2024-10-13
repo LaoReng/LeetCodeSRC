@@ -868,4 +868,64 @@ public:
 		}
 		return newHead;
 	}
+
+///*** No.148
+	ListNode* sortList(ListNode* head) {
+		int* valueArr = new int[50009];
+		int* tempArr = new int[50009];
+
+		// 不交换节点，使用归并排序来解决这个问题
+		if (head == NULL)return NULL;
+		// 首先用O(n)的时间复杂度吧数据提取出来
+		ListNode* p = head;
+		int size = 0;
+		while (p) {
+			++size;
+			valueArr[size - 1] = p->val;
+			p = p->next;
+		}
+		// 开始归并排序
+		int gap = 1;  // 每组归并的数据个数
+		while (gap < size) {
+			// 进行子数组的合并，下一次开始合并的起始位置应该是移动两个子数组长度
+			for (int j = 0; j < size; j += 2 * gap) {
+				int begin1 = j, end1 = begin1 + gap - 1;
+				int begin2 = end1 + 1, end2 = begin2 + gap - 1;
+
+				// 处理特殊情况，防止数组越界（总数为奇数时会出现）
+				if (end1 >= size || begin2 >= size) // 第一个子数组位置超过数组长度或者第二个数组的起始位置超过
+					break;
+				if (end2 >= size) {  // 第二个子数组的结束位置超过数组长度
+					end2 = size - 1;
+				}
+				// 开始两个子数组的合并
+				int i = j;
+				while (begin1 <= end1 && begin2 <= end2) {
+					if (valueArr[begin1] < valueArr[begin2]) {
+						tempArr[i++] = valueArr[begin1++];
+					}
+					else {
+						tempArr[i++] = valueArr[begin2++];
+					}
+				}
+				// 尾部剩余元素的处理
+				while (begin1 <= end1) {
+					tempArr[i++] = valueArr[begin1++];
+				}
+				while (begin2 <= end2) {
+					tempArr[i++] = valueArr[begin2++];
+				}
+				// 将合并的有序数据拷贝到原来指定的位置
+				memcpy(valueArr + j, tempArr + j, sizeof(int) * (end2 - j + 1));
+			}
+			gap *= 2; // 下次合并都是上一次的二倍
+		}
+		p = head;
+		int  i = 0;
+		while (p) {
+			p->val = valueArr[i++];
+			p = p->next;
+		}
+		return head;
+	}
 };
