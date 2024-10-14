@@ -928,4 +928,44 @@ public:
 		}
 		return head;
 	}
+
+///*** No.150
+	int evalRPN(vector<string>& tokens) {
+		// 用栈来实现
+		// 
+		std::stack<int> s;
+		for (int i = 0; i < tokens.size(); ++i){
+			if (tokens[i].size() == 1 && (tokens[i] == "+" || tokens[i] == "-" || tokens[i] == "*" || tokens[i] == "/")){
+				// 这个是运算符，需要运算
+				char ch = tokens[i][0];
+				int b = s.top();
+				s.pop();
+				int a = s.top();
+				s.pop();
+				switch (ch)
+				{
+				case '+':
+					s.push(a + b);
+					break;
+				case '-':
+					s.push(a - b);
+					break;
+				case '*':
+					s.push(a*b);
+					break;
+				case '/':
+					s.push(a / b);
+					break;
+				default:
+					break;
+				}
+			}
+			else{
+				s.push(atoi(tokens[i].data()));
+			}
+		}
+		// std::cout << atoi("-11") << std::endl;
+
+		return s.top();
+	}
 };
