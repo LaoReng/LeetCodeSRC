@@ -968,4 +968,31 @@ public:
 
 		return s.top();
 	}
+
+///*** No.151
+	string reverseWords(string s) {
+		std::string str;
+		std::stack<std::string> sstr;
+		s += " ";
+		for (int i = 0; i < s.size(); ++i) {
+			if (s[i] == ' ') {
+				// 需要进行处理
+				if (str.empty() == false) {
+					sstr.push(str);
+					str.clear();
+				}
+			}
+			else {
+				str += s[i];
+			}
+		}
+		str.clear();
+		while (!sstr.empty()) {
+			str += sstr.top();
+			sstr.pop();
+			if (!sstr.empty())
+				str += " ";
+		}
+		return str;
+	}
 };
