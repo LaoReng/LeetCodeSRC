@@ -995,4 +995,22 @@ public:
 		}
 		return str;
 	}
+
+///*** No.152
+	int maxProduct(vector<int>& nums) {
+		// 当前位置的最大值，等于上一个位置的最大值和本位置的值取最大值
+        // 但是这个又和子序列最大和不一样，他有一个负数乘负数的情况，所以还要取一个最小值
+		// fmax(i) = max(fmax(i-1)*a,fmin(i-1)*a, a)
+		int max = nums[0];
+		int min = nums[0];
+		for (int i = 1; i < nums.size(); ++i){
+            int oldMax = max, oldMin = min;
+			max = std::max(oldMax*nums[i],std::max(oldMin*nums[i], nums[i]));
+			min = std::min(oldMax*nums[i], std::min(oldMin*nums[i], nums[i]));
+			nums[i] = max;
+		}
+
+		return *std::max_element(nums.begin(), nums.end());
+		// return max;
+	}
 };
