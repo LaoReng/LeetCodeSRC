@@ -10,3 +10,6 @@
 
 ### No.147图解（单向链表）
 <img src="resource/No.147.png" alt="No.147" style="zoom:80%;" />
+
+### No.153图解
+<img src="resource/No.153.png" alt="No.153" style="zoom:80%;" />

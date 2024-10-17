@@ -1013,4 +1013,20 @@ public:
 		return *std::max_element(nums.begin(), nums.end());
 		// return max;
 	}
+
+///*** No.153
+	int findMin(vector<int>& nums) {
+		int begin = 0;
+		int end = nums.size()-1;
+		while (begin < end) {
+			int mid = (end - begin) / 2 + begin;
+			if (nums[mid] > nums[end]) {
+				begin = mid+1; // mid比end大，直接跳过mid
+			}
+			else {
+				end = mid;
+			}
+		}
+		return nums[end];
+	}
 };
