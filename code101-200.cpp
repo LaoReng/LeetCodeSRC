@@ -1029,4 +1029,35 @@ public:
 		}
 		return nums[end];
 	}
+
+///*** No.155
+	class MinStack {
+	public:
+		std::multiset<int> m_mset;
+		std::stack<int> m_stack;
+		MinStack() {
+			// 两个数据结构就可以了
+			// 栈和可重复set
+
+		}
+
+		void push(int val) {
+			m_stack.push(val);
+			m_mset.insert(val);
+		}
+
+		void pop() {
+			int top = m_stack.top();
+			m_stack.pop();
+			m_mset.erase(m_mset.find(top));
+		}
+
+		int top() {
+			return m_stack.top();
+		}
+
+		int getMin() {
+			return *m_mset.begin();
+		}
+	};
 };
