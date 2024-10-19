@@ -1060,4 +1060,22 @@ public:
 			return *m_mset.begin();
 		}
 	};
+
+///*** No.162
+	int findPeakElement(vector<int>& nums) {
+		// mid 要是大于 mid+1 ，则峰值在mid的左侧
+		// mid 要是小于 mid+1 ，则峰值在mid的右侧
+		int l = 0;
+		int r = nums.size() - 1;
+		while (l < r) {
+			int mid = (r - l) / 2 + l;
+			if (nums[mid] < nums[mid + 1]) {
+				l = mid + 1; // 往后移一个，就是表明mid不可能成为峰值
+			}
+			else {
+				r = mid;
+			}
+		}
+		return r;
+	}
 };
