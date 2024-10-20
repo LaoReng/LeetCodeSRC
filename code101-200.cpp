@@ -537,6 +537,44 @@ public:
 		return res;
 	}
 
+///*** No.133
+	Node* cloneGraph(Node* node) {
+		// 用一个map标记，base图里面的节点有没有被访问，如果被访问了，那就直接放入到当前节点的neighbors中，没有的话就需要访问他
+		// map => baseNodePtr -> newNodePtr
+		if (!node)return NULL;
+
+		std::map<Node*, Node*> mNode; // 用于记载遍历过的图节点
+		// 深拷贝递归函数
+		std::function<void(Node*, Node*)> dfs = [&](Node* baseNodePtr, Node* newNodePtr) {
+			if (!baseNodePtr || !newNodePtr)return;
+			// mNode.insert(std::make_pair(baseNodePtr, newNodePtr));
+			std::vector<Node*>  _neighbors = baseNodePtr->neighbors;
+			for (auto it : _neighbors) {
+				auto item = mNode.find(it);
+				if (item != mNode.end()) {
+					// 就证明这个东西已经访问过了
+					// 就直接将这个地址放入到当前这个新的newNodePtr的neighbors数组里面就可以了
+					newNodePtr->neighbors.push_back(item->second);
+				}
+				else {
+					// 创建这个新的节点
+					Node* temp = new Node(it->val);
+					// 将这个添加到映射表中
+					mNode.insert(std::make_pair(it, temp));
+					// 并将他添加到新的newNodePtr的neighbors数组里面
+					newNodePtr->neighbors.push_back(temp);
+					// 然后递归遍历这个新创建的节点
+					dfs(it, temp);
+				}
+			}
+		};
+
+		Node* res = new Node(node->val);
+		mNode.insert(std::make_pair(node, res));
+		dfs(node, res);
+		return res;
+	}
+
 ///*** No.134
 	int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
 		// 题解：https://leetcode.cn/problems/gas-station/solutions/488622/134-jia-you-zhan-tan-xin-jing-dian-ti-mu-xiang-jie/
