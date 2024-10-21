@@ -1116,4 +1116,16 @@ public:
 		}
 		return r;
 	}
+
+///*** No.164
+	int maximumGap(vector<int>& nums) {
+		if (nums.size() < 2)return 0;
+		std::sort(nums.begin(), nums.end());
+
+		for (int i = 0; i < nums.size() - 1; i++) {
+			nums[i] = nums[i + 1] - nums[i];
+		}
+		nums[nums.size() - 1] = -9999999;
+		return *std::max_element(nums.begin(), nums.begin() + nums.size() - 1);
+	}
 };
