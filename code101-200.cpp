@@ -1128,4 +1128,46 @@ public:
 		nums[nums.size() - 1] = -9999999;
 		return *std::max_element(nums.begin(), nums.begin() + nums.size() - 1);
 	}
+
+///*** No.165
+	int compareVersion(string version1, string version2) {
+		// 思路，把里面的'.'变成'\0'，然后记录'\0'的位置
+		// 将每一段转化成数字
+		char* verStr1 = (char*)version1.c_str();
+		char* verStr2 = (char*)version2.c_str();
+
+		std::queue<int> verQue1;
+		std::queue<int> verQue2;
+		verQue1.push(-1);
+		verQue2.push(-1);
+
+		for (int i = 0; i < version1.size(); ++i) {
+			if (verStr1[i] == '.') {
+				verStr1[i] = '\0';
+				verQue1.push(i);
+			}
+		}
+		for (int i = 0; i < version2.size(); ++i) {
+			if (verStr2[i] == '.') {
+				verStr2[i] = '\0';
+				verQue2.push(i);
+			}
+		}
+		while (!verQue1.empty() || !verQue2.empty()) {
+			int  ver1 = 0, ver2 = 0;
+			if (!verQue1.empty()) {
+				ver1 = atoi(verStr1 + verQue1.front() + 1);
+				verQue1.pop();
+			}
+			if (!verQue2.empty()) {
+				ver2 = atoi(verStr2 + verQue2.front() + 1);
+				verQue2.pop();
+			}
+			if (ver1 < ver2)
+				return -1;
+			if (ver1 > ver2)
+				return 1;
+		}
+		return 0;
+	}
 };
