@@ -2396,6 +2396,32 @@ private:
         return arr[n];
     }
 
+///*** No.97
+	bool isInterleave(string s1, string s2, string s3) {
+		int m = s1.size();
+		int n = s2.size();
+		if (m + n != s3.size())return false;
+		std::vector<std::vector<bool>> arr(n+1);
+		for (int i = 0; i <= n; i++) {
+			arr[i] = std::vector<bool>(m + 1, 0);
+		}
+		// 先将第一排的横竖两行进行初始化
+		arr[0][0] = true;
+		for (int i = 1; i < arr[0].size() && s3[i - 1] == s1[i - 1]; ++i) {
+			arr[0][i] = true;
+		}
+		for (int i = 1; i < arr.size() && s3[i - 1] == s2[i - 1]; ++i) {
+			arr[i][0] = true;
+		}
+
+		for (int i = 1; i < arr.size(); ++i) {
+			for (int j = 1; j < arr[i].size(); ++j) {
+				arr[i][j] = (arr[i - 1][j] && s3[i + j - 1] == s2[i - 1]) || (arr[i][j - 1] && s3[i + j - 1] == s1[j - 1]);
+			}
+		}
+		return arr[n][m];
+	}
+
 ///*** No.98
 	bool isValidBST(TreeNode* root) {
 		// 对于一颗二叉搜索树来说，中序遍历是升序排列的
