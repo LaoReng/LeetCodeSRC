@@ -1170,4 +1170,24 @@ public:
 		}
 		return 0;
 	}
+
+///*** No.167
+	vector<int> twoSum(vector<int>& numbers, int target) {
+		// 双指针
+		// 如果两个数相加大于target就往后移动
+		// 如果两个数相加小于target就往前移动
+		int l = 0;
+		int r = numbers.size() - 1;
+		while (l < r) {
+			if (numbers[l] + numbers[r] > target) {
+				--r;
+			}
+			else if (numbers[l] + numbers[r] < target) {
+				++l;
+			}
+			else
+				break;
+		}
+		return std::vector<int>{l + 1, r + 1};
+	}
 };
