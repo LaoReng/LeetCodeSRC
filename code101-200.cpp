@@ -1190,4 +1190,26 @@ public:
 		}
 		return std::vector<int>{l + 1, r + 1};
 	}
+
+///*** No.172
+	int trailingZeroes(int n) {
+		// 实际上就是5*2的个数，2一定是比5多的，所以直接判断阶乘中包含多少个5就可以了
+		int res = 1;
+		int zeroNum = 0;
+		for (int i = 1; i <= n; ++i){
+			int temp = i;
+			// 提取5
+			while (true){
+				if (temp % 5 == 0){
+					++zeroNum;
+					temp /= 5;
+				}
+				else{
+					
+					break;
+				}
+			}
+		}
+		return zeroNum;
+	}
 };
