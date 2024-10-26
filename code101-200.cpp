@@ -1212,4 +1212,32 @@ public:
 		}
 		return zeroNum;
 	}
+
+///*** No.173
+	class BSTIterator {
+	public:
+		BSTIterator(TreeNode* root) {
+			inorderTraversal(root);
+			index = 0;
+		}
+
+		int next() {
+			return treeNodeValue[index++];
+		}
+
+		bool hasNext() {
+			return index >= treeNodeValue.size() ? false : true;
+		}
+	private:
+		void inorderTraversal(TreeNode* node) {
+			if (!node)return;
+			inorderTraversal(node->left);
+			treeNodeValue.push_back(node->val);
+			inorderTraversal(node->right);
+		}
+
+	private:
+		std::vector<int> treeNodeValue;
+		size_t index;
+	};
 };
