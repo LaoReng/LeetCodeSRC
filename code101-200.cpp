@@ -1240,4 +1240,14 @@ public:
 		std::vector<int> treeNodeValue;
 		size_t index;
 	};
+
+///*** No.176
+	{
+		# 方法一：先找到最大值，然后删除最大值，limit限制为1
+		SELECT MAX(salary) AS SecondHighestSalary FROM Employee 
+			WHERE id NOT IN(SELECT id FROM Employee WHERE salary in( SELECT MAX(salary) FROM Employee)) LIMIT 1;
+
+		# 方法二：寻找第二大薪水，让寻找的薪水值小于最大的薪水
+		SELECT MAX(salary) AS SecondHighestSalary FROM Employee WHERE salary < (SELECT MAX(salary) FROM Employee);
+	}
 };
