@@ -1250,4 +1250,17 @@ public:
 		# 方法二：寻找第二大薪水，让寻找的薪水值小于最大的薪水
 		SELECT MAX(salary) AS SecondHighestSalary FROM Employee WHERE salary < (SELECT MAX(salary) FROM Employee);
 	}
+
+///*** No.177
+	{
+		CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+		BEGIN
+			SET N = N - 1;
+		RETURN (
+			# Write your MySQL query statement below.
+			
+			SELECT DISTINCT salary FROM Employee ORDER BY salary DESC LIMIT N, 1
+		);
+		END
+	}
 };
