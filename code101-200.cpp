@@ -1262,4 +1262,10 @@ public:
 			);
 		END
 	}
+
+///*** No.178
+	{
+		# 窗口函数
+		SELECT score, dense_rank() OVER(ORDER BY score desc) AS 'rank' FROM Scores;
+	}
 };
