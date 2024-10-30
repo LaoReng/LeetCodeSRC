@@ -1268,4 +1268,46 @@ public:
 		# 窗口函数
 		SELECT score, dense_rank() OVER(ORDER BY score desc) AS 'rank' FROM Scores;
 	}
+
+///*** No.179
+	string largestNumber(vector<int>& nums) {
+        class Compare {
+        public:
+            bool operator()(const std::string& str1, const std::string& str2) {
+                // 两个字符串正反拼接，那个拼出来的大谁就在前面
+
+                std::string str1str2 = str1 + str2;
+                std::string str2str1 = str2 + str1;
+                for(int i = 0; i < str1str2.size(); ++i){
+                    if(str1str2[i] > str2str1[i])
+                        return true;
+                    else if(str1str2[i] < str2str1[i])
+                        return false;
+                }
+                return false;
+            }
+        };
+
+		// 自定义排序函数
+		std::vector<std::string> numsArr;
+        // 数字字符串化
+		for (int i = 0; i < nums.size(); ++i) {
+			char buf[15] = "";
+            sprintf(buf, "%d", nums[i]);
+			numsArr.push_back(buf);
+		}
+
+		std::sort(numsArr.begin(), numsArr.end(), Compare());
+        // 全是0就直接返回0
+        if(numsArr[0] == "0" && numsArr[numsArr.size()-1] == "0")
+            return "0";
+        
+		std::string str;
+		for (auto it : numsArr) {
+			std::cout << it << std::endl;
+			str += it;
+		}
+
+		return str;
+	}
 };
