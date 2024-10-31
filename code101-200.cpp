@@ -1310,4 +1310,14 @@ public:
 
 		return str;
 	}
+
+///*** No.180
+	{
+		# 使用lag()窗口函数，获取当前行的前两行，如果内容一致则表示至少出现了三次
+		# 还需要去一下重
+		SELECT DISTINCT c.num AS ConsecutiveNums FROM (
+			select num, lag(num, 1)over() as a, lag(num, 2)over () as b from Logs
+			) AS c 
+			WHERE c.num = c.a AND c.a = c.b;
+	}
 };
