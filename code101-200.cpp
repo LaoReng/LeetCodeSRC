@@ -1320,4 +1320,15 @@ public:
 			) AS c 
 			WHERE c.num = c.a AND c.a = c.b;
 	}
+
+///*** No.184
+	{
+		SELECT T.name AS Department, e.name AS Employee, e.salary AS Salary 
+			FROM Employee AS e LEFT JOIN  (
+				SELECT d.id AS id, d.name AS name, MAX(e.salary) AS sa 
+					FROM Employee AS e, Department AS d 
+					WHERE e.departmentId = d.id  GROUP BY d.id 
+			) AS T ON e.departmentId = T.id
+			WHERE T.sa = e.salary;
+	}
 };
