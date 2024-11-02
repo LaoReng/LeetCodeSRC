@@ -1331,4 +1331,31 @@ public:
 			) AS T ON e.departmentId = T.id
 			WHERE T.sa = e.salary;
 	}
+
+///*** No.187
+	vector<string> findRepeatedDnaSequences(string s) {
+        std::vector<std::string> res;
+        if(s.size()<10)return res;
+        // 用哈希表进行保存，如果这个DNA序列再次出现就表示出现了不止一次
+		std::map<std::string, bool> mDNA;
+		
+		for (int i = 0; i <= s.size() - 10; ++i) {
+			std::string temp = s.substr(i, 10);
+			auto item = mDNA.find(temp);
+			std::cout << temp << "	" << s.substr(i, 10) << std::endl;
+			if (item == mDNA.end()) {
+				// 表示这个里面没有这10位
+				mDNA.insert(std::make_pair(temp, false));
+			}
+			else {
+				// 表示这个里面存在这10位
+				if (!item->second) {
+					// 没有加入过结果数组
+					item->second = true;
+					res.push_back(temp);
+				}
+			}
+		}
+		return res;
+	}
 };
