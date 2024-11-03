@@ -1358,4 +1358,42 @@ public:
 		}
 		return res;
 	}
+
+///*** No.189
+	void rotate(vector<int>& nums, int k) {
+		k = k % nums.size();
+		if (!k)return;
+#if 1
+		// 位置计算
+		std::function<int(int)> indexCalculate = [&](int currentIndex)->int {
+			int toIndex = -1;
+			if (currentIndex >= 0 && currentIndex < nums.size() - k) {
+				toIndex = currentIndex + k;
+			}
+			else if (currentIndex >= nums.size() - k && currentIndex < nums.size()) {
+				toIndex = currentIndex - nums.size() + k;
+			}
+			return toIndex;
+		};
+		
+		std::vector<int> tempArr = nums;
+		int curIndex = 0;
+
+		while (curIndex < nums.size()) {
+			// 先计算这个元素要放的位置
+			int toIndex = indexCalculate(curIndex);
+			// 如果要去的位置和当前位置一样或者toIndex为-1就结束循环
+			if (toIndex == curIndex || toIndex == -1)
+				break;
+			// 把这个位置的元素放到nums中对应的位置
+			nums[toIndex] = tempArr[curIndex++];
+		}
+#else
+		// 方法二，利用数组反转函数
+		// 反转函数
+		std::reverse(nums.begin(), nums.end());
+		std::reverse(nums.begin(), nums.begin() + k);
+		std::reverse(nums.begin() + k, nums.end());
+#endif
+	}
 };
