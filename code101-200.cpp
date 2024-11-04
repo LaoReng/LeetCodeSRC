@@ -1396,4 +1396,13 @@ public:
 		std::reverse(nums.begin() + k, nums.end());
 #endif
 	}
+
+///*** No.198
+	int rob(vector<int>& nums) {
+        // 只要不是当前位置的前一个，它可以从前面的任意位置过来，最高就是找前面位置最大的
+		for (int i = 2; i < nums.size(); ++i) {
+			nums[i] += *std::max_element(nums.begin(), nums.begin() + (i - 1));
+		}
+		return *std::max_element(nums.begin(), nums.end());
+	}
 };
