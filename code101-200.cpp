@@ -1405,4 +1405,26 @@ public:
 		}
 		return *std::max_element(nums.begin(), nums.end());
 	}
+
+///*** No.199
+	vector<int> rightSideView(TreeNode* root) {
+        // 广度优先遍历，每次输出本层最右边的节点
+		std::vector<int> res;
+		if (root == NULL)return res;
+		std::queue<TreeNode*> temp;
+		temp.push(root);
+		while (!temp.empty()) {
+			res.push_back(temp.back()->val);
+			int size = temp.size();
+			for (int i = 0; i < size; ++i) {
+				TreeNode* p = temp.front();
+				temp.pop();
+				if (p->left)
+					temp.push(p->left);
+				if (p->right)
+					temp.push(p->right);
+			}
+		}
+		return res;
+	}
 };
