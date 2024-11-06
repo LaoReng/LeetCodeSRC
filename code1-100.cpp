@@ -2382,6 +2382,35 @@ private:
 		return res;
 	}
 
+///*** No.95
+	vector<TreeNode*> generateTrees(int n) {
+		// 从start和end中选取一个数字i当做根节点，然后建立它的左子树和右子树
+		// 建立左子树和右子树也是同样的方式，然后把所有可行的左子树和右子树选出一棵来凭借成我们最后的搜索二叉树
+		std::function<std::vector<TreeNode*>(int, int)> dfs = [&](int start, int end)->std::vector<TreeNode*> {
+			if (start > end)
+				return { nullptr };
+			// 所有可行的搜索二叉树
+			std::vector<TreeNode*> allTrees;
+			for (int i = start; i <= end; ++i) {
+				std::vector<TreeNode*> leftTree = dfs(start, i - 1); // 递归获取所有可行的左子树
+				std::vector<TreeNode*> rightTree = dfs(i + 1, end);  // 递归获取所有可行的左子树
+				for (auto ln : leftTree) {
+					for (auto rn : rightTree) {
+						TreeNode* allTree = new TreeNode(i);
+						allTree->left = ln;
+						allTree->right = rn;
+						allTrees.emplace_back(allTree);
+					}
+				}
+
+			}
+			return allTrees;
+		};
+
+		if (n == 0)return { nullptr };
+		return dfs(1, n);
+	}
+
 ///*** No.96
 	int numTrees(int n) {
 		// README中有图解
