@@ -50,4 +50,52 @@ class Solution
         return left << shift;
 #endif
     }
+
+///*** No.207
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+		// 拓扑排序，选择入度为0的，为第一个可以学习的课
+		// 然后将以这科为入度的结点减一，循环执行上面步骤，直到没有入度大于0的为止
+		std::map<int, int> mCou;
+
+		for (int i = 0; i < numCourses; ++i) {
+			mCou.insert(std::make_pair(i, 0));
+		}
+
+		for (auto it : prerequisites) {
+			mCou[it[0]]++;
+		}
+
+		bool running = false;
+		do {
+			running = false;
+			// 找到second为0的
+			auto it = mCou.begin();
+			for (; it != mCou.end(); ++it) {
+				if (it->second == 0)
+					break;
+			}
+			if (it != mCou.end()) {
+				running = true;
+				// 把这个是0的，从map中移除
+				int zero = it->first;
+				mCou.erase(it);
+
+				for (auto vIt = prerequisites.begin(); vIt != prerequisites.end(); ) {
+					if ((*vIt)[1] == zero) {
+						
+						mCou[(*vIt)[0]]--;
+						prerequisites.erase(vIt);
+						vIt = prerequisites.begin();
+					}
+					else {
+						vIt++;
+					}
+				}
+			}
+		} while (!mCou.empty() && running);
+
+		if (mCou.empty())return true;
+
+		return false;
+	}
 };
