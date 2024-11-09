@@ -98,4 +98,50 @@ class Solution
 
 		return false;
 	}
+
+///*** No.210
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+		// 拓扑排序，与No.207类似
+		std::map<int, int> mPre;
+		std::vector<int> res;  // 最终上课的顺序
+		for (int i = 0; i < numCourses; ++i) {
+			mPre.insert(std::make_pair(i, 0));
+		}
+
+		for (auto it : prerequisites) {
+			mPre[it[0]]++;
+		}
+		// 不仅map不为空，还要进去运行了，不要死循环空转
+		bool isRunning = true;
+		while (!mPre.empty() && isRunning) {
+			isRunning = false;
+			// 找到0入度的课程
+			auto  mIt = mPre.begin();
+			for (; mIt != mPre.end(); mIt++) {
+				if (!mIt->second)break;
+			}
+			if (mIt == mPre.end())continue;
+			isRunning = true;
+			// 把mIt从map中移除
+			int XXClass = mIt->first; // 先行课
+			mPre.erase(mIt);
+
+			res.push_back(XXClass);
+
+			for (auto vIt = prerequisites.begin(); vIt != prerequisites.end(); ) {
+				if ((*vIt)[1] == XXClass) {
+					mPre[(*vIt)[0]]--;
+					prerequisites.erase(vIt);
+					vIt = prerequisites.begin();
+				}
+				else {
+					vIt++;
+				}
+			}
+		}
+
+		if (!mPre.empty())
+			res.clear();
+		return res;
+	}
 };
