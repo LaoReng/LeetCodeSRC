@@ -99,6 +99,43 @@ class Solution
 		return false;
 	}
 
+///*** No.209
+	int minSubArrayLen(int target, vector<int>& nums) {
+		// 前缀和
+		std::vector<int> qSum(nums.size());
+		qSum[0] = nums[0];
+		for (int i = 1; i < nums.size(); ++i) {
+			qSum[i] = nums[i] + qSum[i - 1];
+		}
+
+		int min = 0;
+		int index = 0;
+		for (int i = 0; i < qSum.size(); ++i) {
+			if (qSum[i] >= target) {
+				min = i + 1;
+				index = i;
+				break;
+			}
+		}
+		if (!min)return min;
+
+		for (int i = index; i < qSum.size(); ++i) {
+			// 从这个位置往回减，如果减到大于最小值了，就直接丢弃
+			int count = 0;
+			for (int j = i - 1; j >= 0; --j) {
+				++count;
+				if (qSum[i] - qSum[j] >= target) {
+					// 就可以把count和min取最小值
+					if (min > count)
+						min = count;
+				}
+				if (count > min)
+					break;
+			}
+		}
+		return min;
+	}
+
 ///*** No.210
     vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
 		// 拓扑排序，与No.207类似
