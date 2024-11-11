@@ -181,4 +181,33 @@ class Solution
 			res.clear();
 		return res;
 	}
+
+///*** No.216
+	vector<vector<int>> combinationSum3(int k, int n) {
+		std::vector<int> item;
+		std::vector<std::vector<int>> res;
+
+		std::function<void(int, int, int)> dfs = [&](int sum, int currentK, int currentValue) {
+			if (sum >= n || currentK >= k) {
+				if (sum == n && item.size() == k) {
+					res.push_back(item);
+				}
+				return;
+			}
+			for (int i = currentValue + 1; i <= 9; ++i) {
+				item.push_back(i);
+				dfs(sum + i, currentK + 1, i);
+				item.pop_back();
+			}
+		};
+
+		for (int i = 1; i <= 9; ++i) {
+			if (i <= n) {
+				item.push_back(i);
+				dfs(i, 1, i);
+				item.pop_back();
+			}
+		}
+		return res;
+	}
 };
