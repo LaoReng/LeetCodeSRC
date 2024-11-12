@@ -182,6 +182,27 @@ class Solution
 		return res;
 	}
 
+///*** No.213
+	int rob(vector<int>& nums) {
+        // 第一和最后一家不能同时偷
+		// 舍弃第一家求最大值
+		// 舍弃最后一家求最大值
+		if (nums.size() < 3) {
+			return *std::max_element(nums.begin(), nums.end());
+		}
+		std::function<int(std::vector<int>)> maxRob = [&](std::vector<int> nums) {
+			for (int i = 2; i < nums.size(); ++i) {
+				nums[i] += *std::max_element(nums.begin(), nums.begin() + i - 1);
+			}
+			return *std::max_element(nums.begin(), nums.end());
+		};
+
+		return std::max(
+			maxRob(std::vector<int>(nums.begin() + 1, nums.end())),
+			maxRob(std::vector<int>(nums.begin(), nums.begin() + nums.size() - 1))
+		);
+	}
+
 ///*** No.216
 	vector<vector<int>> combinationSum3(int k, int n) {
 		std::vector<int> item;
