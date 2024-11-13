@@ -231,4 +231,39 @@ class Solution
 		}
 		return res;
 	}
+
+///*** No.223
+	int computeArea(int ax1, int ay1, int ax2, int ay2, int bx1, int by1, int bx2, int by2) {
+		// 点数据结果判断属于那个矩形
+		class Point {
+		public:
+			Point() = default;
+			Point(int val, int recName)
+				: value(val)
+				, rectangleName(recName)
+			{}
+			bool operator()(const Point& point1, const Point& point2) {
+				return point1.value < point2.value;
+			}
+			int  value;
+			int rectangleName;
+		};
+
+		// 总面积等于两个矩形面积减去相交的矩形面积
+		int intersectArea = 0;
+		do {
+			// 如果不是一个矩形的两个顶点挨在一起排序，则它们就有相交的线段
+			// 长和宽都是这么判断，当长和宽都有焦点则矩形成立，否则面积为0
+			std::vector<Point> X = { {ax1,1}, {ax2,1},{bx1, 2},{bx2, 2} };
+			std::vector<Point> Y = { {ay1, 1}, {ay2, 1},{by1, 2},{by2, 2} };
+			std::sort(X.begin(), X.end(), Point());
+			if (X[0].rectangleName == X[1].rectangleName)
+				break;
+			std::sort(Y.begin(), Y.end(), Point());
+			if (Y[0].rectangleName == Y[1].rectangleName)
+				break;
+			intersectArea = (Y[2].value - Y[1].value) * (X[2].value - X[1].value);
+		} while (false);
+		return ((ax2 - ax1) * (ay2 - ay1)) + ((bx2 - bx1) * (by2 - by1)) - intersectArea;
+	}
 };
