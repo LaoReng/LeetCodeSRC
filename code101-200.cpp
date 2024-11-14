@@ -1191,6 +1191,26 @@ public:
 		return std::vector<int>{l + 1, r + 1};
 	}
 
+///*** No.169
+	int majorityElement(vector<int>& nums) {
+        // 摩尔投票算法
+        // 这个算法的本质意思就是当这个候选数是众数时，他与其它非众数的和应该大于0
+        // 所以就假定候选数，然后计算候选数与非候选数的和，当等于0时更换候选数
+        int candidate; // 候选的多数
+        int sum = 0; // 总和
+
+        for(auto it:nums){
+            if(sum ==0) candidate = it;
+            sum += (it==candidate?1:-1);
+        }
+
+        int count = 0;
+        for(auto it:nums)
+            if(candidate==it)++count;
+
+        return count>nums.size()/2?candidate:0;
+    }
+
 ///*** No.172
 	int trailingZeroes(int n) {
 		// 实际上就是5*2的个数，2一定是比5多的，所以直接判断阶乘中包含多少个5就可以了
