@@ -266,4 +266,55 @@ class Solution
 		} while (false);
 		return ((ax2 - ax1) * (ay2 - ay1)) + ((bx2 - bx1) * (by2 - by1)) - intersectArea;
 	}
+
+///*** No.229
+	vector<int> majorityElement(vector<int>& nums) {
+        // 摩尔投票的规律，
+        // 如果多数大于n/2，则至多有1个多数
+        // 如果多数大于n/3，则至多有2个多数
+        // 如果多数大于n/m，则至多有m-1个多数
+
+        int candidate1 = nums[0], count1 = 0;
+        int candidate2 = nums[0], count2 = 0;
+        std::vector<int> res;
+
+        // 抵消算法
+        for(int num : nums){
+            if(num == candidate1){
+                ++count1;
+                continue;
+            }
+            if(num == candidate2){
+                ++count2;
+                continue;
+            }
+
+            if(count1 == 0){
+                candidate1 = num;
+                count1 = 1;
+                continue;
+            }
+            if(count2 == 0){
+                candidate2 = num;
+                count2 = 1;
+                continue;
+            }
+            --count1;
+            --count2;
+        }
+
+        // 计数算法
+        count1 = count2 = 0;
+        for(int num : nums){
+            if(candidate1 == num)
+                ++count1;
+            if(candidate2 == num)
+                ++count2;
+        }
+        std::cout<<candidate1<<" "<<candidate2;
+
+        if(count1 > nums.size() / 3) res.push_back(candidate1);
+        if(count2 > nums.size() / 3 && candidate1 != candidate2) res.push_back(candidate2);
+        return res;
+    }
 };
