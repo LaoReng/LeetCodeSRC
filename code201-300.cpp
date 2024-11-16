@@ -203,6 +203,36 @@ class Solution
 		);
 	}
 
+///*** No.215
+	int findKthLargest(vector<int>& nums, int k) {
+		// 详细题解见README.md的No.215图解
+		std::function<int(std::vector<int>&, int)> quickSelect = [&](std::vector<int>& nums, int k)->int {
+			int index = rand() % nums.size(); // 0;
+			std::vector<int> L, mid, R;
+			for (int num : nums) {
+				if (num > nums[index]) {
+					L.push_back(num);
+				}
+				else if (num < nums[index]) {
+					R.push_back(num);
+				}
+				else {
+					mid.push_back(num);
+				}
+			}
+
+			if (k <= L.size()) {
+				return quickSelect(L, k);
+			}
+			if (k - L.size() <= mid.size()) {
+				return mid[0];
+			}
+			return quickSelect(R, k - (L.size() + mid.size())); // L.size + mid.size = nums.size - R.size
+		};
+
+		return quickSelect(nums, k);
+	}
+
 ///*** No.216
 	vector<vector<int>> combinationSum3(int k, int n) {
 		std::vector<int> item;
