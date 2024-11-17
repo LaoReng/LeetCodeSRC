@@ -1171,6 +1171,55 @@ public:
 		return 0;
 	}
 
+///*** No.166
+	string fractionToDecimal(int numerator, int denominator) {
+		// 如果出现过之前出现的**余数**，则表示开始循环
+
+		if (!numerator)return "0";
+		std::string res; // 最后结果
+		std::map<long long, int> mapFractionalPart; // 用来判断循环
+		std::string strFractionalPart;  // 小数部分
+		// 处理之前首先扩大存储，防止溢出
+		long long llNumerator = numerator;
+		long long llDenominator = denominator;
+		// 首先把符号去掉
+		int symbol = 1;
+		llNumerator < 0 ? (symbol *= -1, llNumerator *= -1) : 0;
+		llDenominator < 0 ? (symbol *= -1, llDenominator *= -1) : 0;
+		if (symbol == -1)res += '-';
+		// 整数部分
+		char buf[40] = "";
+		sprintf(buf, "%lld", llNumerator / llDenominator);
+		res += buf;
+		// 小数部分
+		do {
+			if (llNumerator % llDenominator != 0)res += '.';
+			else break;
+
+			// 把他的余数拿过来*10，然后这就是小数部分
+			long long remainder = llNumerator % llDenominator;
+			while (remainder) {
+				remainder *= 10;
+				// 先在map中查找存在remainder吗
+				auto item = mapFractionalPart.find(remainder);
+				if (item != mapFractionalPart.end()) {
+					// 这是存在的情况
+					strFractionalPart.insert(item->second, "(");
+					strFractionalPart += ')';
+					break;
+				}
+				// 这是不存在的情况
+				char buf[40] = "";
+				sprintf(buf, "%lld", remainder / llDenominator);
+				mapFractionalPart.insert(std::make_pair(remainder, strFractionalPart.size()));
+				strFractionalPart += buf;
+				remainder %= llDenominator;
+			}
+		} while (false);
+		res += strFractionalPart;
+		return res;
+	}
+
 ///*** No.167
 	vector<int> twoSum(vector<int>& numbers, int target) {
 		// 双指针
