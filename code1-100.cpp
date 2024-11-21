@@ -581,6 +581,32 @@ private:
         return head;
     }
 
+///*** No.20
+	bool isValid(string s) {
+		std::stack<char> isValid;
+		std::map<char, int> m = {
+			{'(', 1},
+			{')', 1},
+			{'{', 2},
+			{'}', 2},
+			{'[', 3},
+			{']', 3}
+		};
+
+		for (auto it : s) {
+			if (it == '(' || it == '{' || it == '[') {
+				isValid.push(it);
+			}
+			else {
+				if (isValid.empty())return false;
+				if (m[it] == m[isValid.top()])
+					isValid.pop();
+				else return false;
+			}
+		}
+		return isValid.empty();
+	}
+
 ///*** No.22
     vector<string> generateParenthesis(int n) {
 		int check = 0;  // 检测括号，'('+1 ')'-1
