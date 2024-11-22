@@ -363,6 +363,24 @@ public:
 		return sum;
 	}
 
+///*** No.14
+	string longestCommonPrefix(vector<string>& strs) {
+		if (strs.size() < 2)return !strs.size() ? "" : strs[0];
+		std::string CommonPrefix = strs[0];
+
+		for (int i = 1; i < strs.size(); ++i) {
+			std::string tempCP;
+			for (int j = 0; j < CommonPrefix.size(); ++j) {
+				if (j >= strs[i].size())break;
+				if (CommonPrefix[j] == strs[i][j])
+					tempCP += CommonPrefix[j];
+				else break;
+			}
+			CommonPrefix = tempCP;
+		}
+		return  CommonPrefix;
+	}
+
 ///*** No.15
     vector<vector<int>> threeSum(vector<int>& nums) {
         // 三数之和
