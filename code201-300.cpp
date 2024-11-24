@@ -262,6 +262,40 @@ class Solution
 		return res;
 	}
 
+///*** No.221
+	int maximalSquare(vector<vector<char>>& matrix) {
+		if (matrix.size() <= 0)return 0;
+		if (matrix[0].size() <= 0)return 0;
+		// 等于三个方向的最小值，加上当前位置的值
+		std::vector<std::vector<int>> dp;
+		for (int i = 0; i < matrix.size(); ++i) {
+			std::vector<int> item(matrix[0].size(), 0);
+			dp.push_back(item);
+		}
+		int maxSide = 0;
+		for (int i = 0; i < matrix.size(); ++i) {
+			dp[i][0] = matrix[i][0] - '0';
+			if (matrix[i][0] - '0' > maxSide)
+				maxSide = matrix[i][0] - '0';
+		}
+		for (int i = 0; i < matrix[0].size(); ++i) {
+			dp[0][i] = matrix[0][i] - '0';
+			if (matrix[0][i] - '0' > maxSide)
+				maxSide = matrix[0][i] - '0';
+		}
+		for (int i = 1; i < dp.size(); ++i) {
+			for (int j = 1; j < dp[i].size(); ++j) {
+				if (matrix[i][j] == '1') {
+					dp[i][j] = std::min(std::min(dp[i - 1][j], dp[i][j - 1]), dp[i - 1][j - 1]) +1;
+					if (dp[i][j]  > maxSide)
+						maxSide = dp[i][j];
+				}
+			}
+		}
+
+		return maxSide * maxSide;
+	}
+
 ///*** No.223
 	int computeArea(int ax1, int ay1, int ax2, int ay2, int bx1, int by1, int bx2, int by2) {
 		// 点数据结果判断属于那个矩形
