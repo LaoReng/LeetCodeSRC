@@ -331,6 +331,72 @@ class Solution
 		return ((ax2 - ax1) * (ay2 - ay1)) + ((bx2 - bx1) * (by2 - by1)) - intersectArea;
 	}
 
+///*** No.227
+	int calculate(string s) {
+		//  字符串转数字
+		std::function<long long(std::string, int, int)> str2ll = [&](std::string str, int begin, int end)->long long {
+			long long result = 0;
+			for (int i = begin; i < end; ++i) {
+				if (str[i] == ' ' || (str[i] < '0' || str[i]>'9'))continue;
+
+				result = (result * 10) + (str[i] - '0');
+			}
+			return result;
+		};
+
+		// 可以用栈来实现
+		// 先算*/法，然后把栈中剩下的进行相加
+		std::stack<long long> sta;
+		long long ret = 0;
+		// int begin = 0;
+		char fh = ' ';
+		for (int i = 0; i < s.size(); ++i) {
+			if (isdigit(s[i])) {
+				ret = (ret * 10) + (s[i] - '0');
+			}
+			// 如果当前的不是数字也不是空
+			if ((!isdigit(s[i]) && s[i] != ' ') || (i == s.size() - 1)) {
+				// 当前符号是作用于下一个元素的
+				// ret = str2ll(s, begin, i == s.size() - 1 ? s.size() : i); // 显然这个一起算是不行的，要边走边算
+				switch (fh)
+				{
+				case '-':
+					ret *= -1;
+					break;
+				case '*':
+					// 把栈顶元素出栈与ret计算，然后把结果放回去
+					if (!sta.empty()) {
+						ret *= sta.top();
+						sta.pop();
+					}
+					break;
+				case '/':
+					if (!sta.empty()) {
+						ret = sta.top() / ret;
+						sta.pop();
+					}
+					break;
+				// +号和' '（相当于第一个元素）,对于他作用的后边的元素没有什么影响，直接存就可以
+				/*case '+':
+					break;
+				default:
+					// 没有符号，这是第一个，那就直接存栈里面 */
+				}
+				sta.push(ret); // 保存到栈中
+				// begin = i + 1;
+				fh = s[i]; // 更新符号
+				ret = 0;  // 更新值
+			}
+		}
+
+		int result = 0;
+		while (!sta.empty()) {
+			result += sta.top();
+			sta.pop();
+		}
+		return result;
+	}
+
 ///*** No.229
 	vector<int> majorityElement(vector<int>& nums) {
         // 摩尔投票的规律，
