@@ -447,4 +447,22 @@ class Solution
         if(count2 > nums.size() / 3 && candidate1 != candidate2) res.push_back(candidate2);
         return res;
     }
+
+///*** No.230
+	int kthSmallest(TreeNode* root, int k) {
+        int result = 0;
+        int index = 0;
+        std::function<void(TreeNode*)> inorderTraversal = [&](TreeNode* node){
+            if (!node)return;
+            if(index == k)return;
+            inorderTraversal(node->left);
+            if(index == k)return;
+            ++index;
+            result = node->val;
+            inorderTraversal(node->right);
+        };
+
+		inorderTraversal(root);
+		return result;
+	}
 };
