@@ -465,4 +465,39 @@ class Solution
 		inorderTraversal(root);
 		return result;
 	}
+
+///*** No.235
+	TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+		//** 这道题的本质就是找到目标元素所访问的节点，取两个访问节点列表的最后一个相同节点
+		// 两个数组保存找到p和q这两个节点时，所走过的节点
+		// 然后两个数组取交集
+		// 交集的最后一个元素就是最近公共祖先
+		std::vector<TreeNode*> findList; // 记录寻找target所访问的路径节点
+		std::function<bool(TreeNode*, int)> findNode = [&](TreeNode* node, int target)->bool {
+			if (!node)return false;
+			findList.push_back(node);
+			if (node->val < target)
+				return findNode(node->right, target);
+			if (node->val > target)
+				return findNode(node->left, target);
+			return true;
+		};
+
+		findNode(root, p->val);
+		std::vector<TreeNode*> pList = findList;
+		findList.clear();
+		findNode(root, q->val);
+		std::vector<TreeNode*> qList = findList;
+
+		TreeNode* result = root;
+		for (auto pIt : pList) {
+			for (auto qIt : qList) {
+				if (pIt == qIt) {
+					result = pIt;
+					break;
+				}
+			}
+		}
+		return result;
+	}
 };
