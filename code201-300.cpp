@@ -500,4 +500,50 @@ class Solution
 		}
 		return result;
 	}
+
+///*** No.236
+	TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+		// 就是寻找到这个目标元素的路径
+		int isFind = false;
+		std::vector<TreeNode*> findList;
+		std::function<void(TreeNode*, TreeNode*)> findPath = [&](TreeNode* node, TreeNode* target) {
+			if (isFind)return;
+			if (node == nullptr)return;
+			findList.push_back(node);
+			if (node == target) {
+				isFind = true;
+				return;
+			}
+			if (isFind)return;
+			findPath(node->left, target);
+			if (isFind)return;
+			findPath(node->right, target);
+			if (isFind)return;
+			findList.pop_back();
+		};
+
+		std::vector<TreeNode*> pList;
+		std::vector<TreeNode*> qList;
+		findPath(root, p);
+		if (isFind) {
+			isFind = false;
+			pList = findList;
+			findList.clear();
+		}
+		findPath(root, q);
+		if (isFind) {
+			isFind = false;
+			qList = findList;
+			findList.clear();
+		}
+
+		TreeNode* result = root;
+		for (auto pIt : pList) {
+			for (auto qIt : qList) {
+				if (pIt == qIt)
+					result = pIt;
+			}
+		}
+		return result;
+	}
 };
