@@ -546,4 +546,12 @@ class Solution
 		}
 		return result;
 	}
+
+///*** No.237
+	void deleteNode(ListNode* node) {
+		// 把他下一个节点的值，复制给他，然后把下一个节点删除
+		if (node->next == nullptr)return;
+		node->val = node->next->val;
+		node->next = node->next->next;
+	}
 };
