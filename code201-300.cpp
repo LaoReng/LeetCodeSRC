@@ -99,6 +99,64 @@ class Solution
 		return false;
 	}
 
+///*** No.208
+	class Trie {
+	public:
+		// 以树的结构，存储单词的每一个字母
+
+		Trie()
+			: subTrie(26)
+			, isEnd(false)
+		{}
+
+		void insert(string word) {
+			Trie* node = this;
+			for (auto it : word) {
+				int index = it - 'a';
+				if (node->subTrie[index] == nullptr) {
+					node->subTrie[index] = new Trie();
+				}
+				node = node->subTrie[index];
+			}
+			node->isEnd = true;
+		}
+
+		bool search(string word) {
+			Trie* node = findWith(word);
+			return node != nullptr && node->isEnd;
+		}
+
+		bool startsWith(string prefix) {
+			return findWith(prefix) != nullptr;
+		}
+	private:
+		// 查找字符串或前缀
+		Trie* findWith(const std::string& word) {
+			Trie* node = this;
+			for (auto it : word) {
+				int index = it - 'a';
+				if (node->subTrie[index] == nullptr) {
+					return nullptr;
+				}
+				node = node->subTrie[index];
+			}
+			return node;
+		}
+	private:
+		std::vector<Trie*> subTrie; // 单词字母分支节点
+		bool isEnd;  // 是否是某个单词的结束
+	};
+
+	class Solution {
+	public:
+		void deleteNode(ListNode* node) {
+			// 把他下一个节点的值，复制给他，然后把下一个节点删除
+			if (node->next == nullptr)return;
+			node->val = node->next->val;
+			node->next = node->next->next;
+		}
+	};
+
 ///*** No.209
 	int minSubArrayLen(int target, vector<int>& nums) {
 		// 前缀和
