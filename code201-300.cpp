@@ -612,4 +612,22 @@ class Solution
 		node->val = node->next->val;
 		node->next = node->next->next;
 	}
+
+///*** No.238
+	vector<int> productExceptSelf(vector<int>& nums) {
+        int len = nums.size();
+        if(len<2)return {};
+        std::vector<int> res(len, 1);
+        // 先把他前面的给计算一下
+        for(int i=1;i<len;++i){
+            res[i] = res[i-1]*nums[i-1];
+        }
+        int temp = 1;
+        // 在吧他后面的进行计算
+        for(int i=len-2;i>=0;--i){ // 倒序计算后面的，用来符合后面的乘机计算
+            temp *= nums[i+1];
+            res[i] *= temp;
+        }
+        return res;
+    }
 };
