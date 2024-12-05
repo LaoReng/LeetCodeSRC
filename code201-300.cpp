@@ -630,4 +630,26 @@ class Solution
         }
         return res;
     }
+
+///*** No.240
+	bool searchMatrix(vector<vector<int>>& matrix, int target) {
+		// 每一行进行二分查找
+		int res = false;
+		for (int i = 0; i < matrix.size(); ++i) {
+			int l = 0, r = matrix[i].size() - 1;
+			while (l <= r) {
+				int mid = (r - l) / 2 + l;
+				if (matrix[i][mid] > target)
+					r = --mid;
+				else if (matrix[i][mid] < target)
+					l = ++mid;
+				else {
+					res = true;
+					break;
+				}
+			}
+			if (res)break;
+		}
+		return res;
+	}
 };
