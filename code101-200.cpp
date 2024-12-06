@@ -597,6 +597,16 @@ public:
 		return startIndex;
 	}
 
+///*** No.136
+	int singleNumber(vector<int>& nums) {
+        // 异或运算特点：相同为0，不同为1 ※也就说n^n=0; 0^n=n; 
+        int res = 0;
+        for(auto it:nums) {
+            res ^= it;
+        }
+        return res;
+    }
+
 ///*** No.137
 	int singleNumber(vector<int>& nums) {
 		int res = nums[0];
